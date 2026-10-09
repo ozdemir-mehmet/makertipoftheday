@@ -39,7 +39,7 @@ write_doc() { # write_doc <expires_on>
   cat > "$DOC" <<TIP
 ---
 title: "Preview check"
-summary: "A one-line lead that must render above the fold"
+summary: "A one-line lead with an & an ampersand that must render above the fold"
 surface: power-platform
 tip_number: 99
 date: $TODAY
@@ -90,17 +90,13 @@ if [ ! -f "$PAGE" ]; then
   exit 1
 fi
 
-check "verified badge renders" "Verified"
-check "re-verify date renders" "re-verify by"
-check "tested-against row renders" "Tested against"
-check "licence and cost row renders" "Licence and cost"
-check "primary source row renders" "Primary source"
-check "a source URL with a query string is escaped" "&amp;tabs=1"
-if grep -q "&tabs=1" "$PAGE"; then
-  echo "FAIL  an unescaped '&' reached the markup from the source URL"
+check "the tip title renders" "Preview check"
+check "an ampersand in a rendered field is escaped" "&amp; an ampersand"
+if grep -q " & " "$PAGE"; then
+  echo "FAIL  an unescaped '&' reached the markup from a rendered field"
   fail=1
 else
-  echo "ok    no unescaped '&' from the source URL"
+  echo "ok    no unescaped '&' in a rendered field"
 fi
 check "the tip body renders" "Preview body."
 if grep -q "<h2>Evidence</h2>" "$PAGE"; then
@@ -120,10 +116,24 @@ else
   echo "ok    the chip carries the label, not the slug"
 fi
 
-# The listings carry the same badge as the tip page, from _includes/tip-status.html. This is where a
-# lapsed tip used to look identical to a fresh one.
-check_in "the home page lists the tip as verified" "badge ok" "$DEST/index.html"
-check_in "the all-tips page lists the tip as verified" "badge ok" "$DEST/all/index.html"
+# Nothing about verification or provenance reaches a reader, in either state. The badge, the
+# re-verify date, the past-expiry notice and the tested-against/environment/cost/artifact/source strip
+# all rendered once. A fresh tip and a lapsed one must now look identical, because neither of them
+# tells the reader that anything was checked.
+absent() { # absent <label> <marker> <file>
+  if grep -q "$2" "$3"; then
+    echo "FAIL  $1 ('$2' is rendered into a public page)"
+    fail=1
+  else
+    echo "ok    $1"
+  fi
+}
+for marker in "Verified" "re-verify by" "Past its re-verification date" "badge ok" "badge expired" \
+              "Tested against" "Licence and cost" "Primary source"; do
+  absent "no '$marker' on the tip page" "$marker" "$PAGE"
+  absent "no '$marker' in the home listing" "$marker" "$DEST/index.html"
+  absent "no '$marker' in the all-tips listing" "$marker" "$DEST/all/index.html"
+done
 if grep -q 'class="surface">power-platform' "$DEST/index.html"; then
   echo "FAIL  the home listing shows the raw surface slug instead of the label"
   fail=1
@@ -134,22 +144,10 @@ fi
 write_doc "$PAST"
 jekyll build --source "$SRC" --destination "$DEST" > /dev/null
 
-check "past-expiry notice renders" "Past its re-verification date"
-if grep -q "re-verify by" "$PAGE"; then
-  echo "FAIL  a tip past its expiry still shows the verified badge"
-  fail=1
-else
-  echo "ok    a tip past its expiry drops the verified badge"
-fi
-
-check_in "the home page marks the lapsed tip" "badge expired" "$DEST/index.html"
-check_in "the all-tips page marks the lapsed tip" "badge expired" "$DEST/all/index.html"
-if grep -q "badge ok" "$DEST/all/index.html"; then
-  echo "FAIL  the all-tips page still calls a lapsed tip verified"
-  fail=1
-else
-  echo "ok    the all-tips page drops the verified badge once a tip lapses"
-fi
+for marker in "Verified" "re-verify by" "Past its re-verification date" "badge expired" "Tested against"; do
+  absent "a lapsed tip shows no '$marker' either" "$marker" "$PAGE"
+  absent "a lapsed tip shows no '$marker' in the all-tips listing" "$marker" "$DEST/all/index.html"
+done
 
 if [ "$fail" -ne 0 ]; then
   echo
@@ -158,4 +156,4 @@ if [ "$fail" -ne 0 ]; then
 fi
 
 echo
-echo "Tip layout renders correctly at /tip/$NAME/, and the listings carry the same state, in both states."
+echo "Tip layout renders correctly at /tip/$NAME/, and the lists publish no verification state, in both states."

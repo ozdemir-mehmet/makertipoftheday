@@ -45,12 +45,15 @@ evidence: |
 The title and the summary are the two things a reader sees before deciding to read the tip, and the
 summary is capped at 200 characters on purpose: a summary that runs longer than that is the tip.
 
-**The body is the tip. The proof is internal.** `evidence` holds the commands and the pasted output
-that convinced you the tip is true, and `_layouts/tip.html` never renders it - it exists so a
-reviewer and the nightly job can check the tip was really run. Nothing in the body should read as
-proof either: no methodology recitals, no "measured across N tables", no long verbatim quotations from
-the source. Those belong in `evidence`. The provenance strip (tested against, environment, cost,
-artifact, primary source) is the reader's trust signal and does stay on the page.
+**The body is the tip. The proof is internal, and so is the provenance.** `evidence` holds the
+commands and the pasted output that convinced you the tip is true; the rest of the front matter holds
+what it was checked against. None of it is rendered - `_layouts/tip.html` publishes no Evidence
+section, no badge, no re-verify date, no tested-against/environment/cost/artifact/source strip, and
+the listings publish no badge either. `scripts/preview.sh` asserts every one of those is ABSENT, in a
+fresh state and in a lapsed one, so the rule has a guard rather than a convention. Nothing in the body
+should read as proof either: no methodology recitals, no "measured across N tables", no long verbatim
+quotations from the source. Those belong in `evidence`. An artifact is linked from the body, at the
+point the tip uses it, because a reader can use a script and has no use for an inventory row.
 
 A front-matter value in double quotes cannot contain an escaped double quote - the validator's reader
 ends the value at the first closing quote and rejects what follows. If a value needs to quote

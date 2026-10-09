@@ -112,3 +112,6 @@ Two more on the list earn their keep:
 
 Where it pays: a migration that has to preserve original dates, a report where "created on" has to
 mean something, and a schema review where somebody is about to build a column that already exists.
+
+Want the list for your own tables? [table-columns.py](/assets/tips/14-twelve-columns-you-did-not-create/table-columns.py)
+prints it for any solution package you point it at.

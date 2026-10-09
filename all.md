@@ -19,8 +19,7 @@ permalink: /all/
   {% for tip in group %}
   <li>
     <a href="{{ tip.url | relative_url }}">{{ tip.title | escape }}</a>
-    <span class="meta">Tip #{{ tip.tip_number }} &middot; {{ tip.date | date: "%d %b %Y" }} &middot;
-      {% include tip-status.html tip=tip mode="line" %}</span>
+    <span class="meta">Tip #{{ tip.tip_number }} &middot; {{ tip.date | date: "%d %b %Y" }}</span>
   </li>
   {% endfor %}
 </ul>

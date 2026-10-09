@@ -65,22 +65,7 @@ h2 { font-size: 1.2rem; margin-top: 2rem; }
   color: var(--muted);
 }
 
-.badge { display: inline-block; font-size: .8rem; border-radius: 4px; padding: .15rem .45rem; }
-.badge.ok { color: var(--ok); background: color-mix(in srgb, var(--ok) 12%, transparent); }
-.badge.warn { color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
-.badge.expired { color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, transparent); }
-
 .notice { border-left: 3px solid var(--warn); background: var(--panel); padding: .75rem 1rem; margin: 1.25rem 0; }
-
-dl.facts { display: grid; grid-template-columns: 11rem 1fr; gap: .3rem .9rem; margin: 1.25rem 0; font-size: .92rem; }
-dl.facts dt { color: var(--muted); }
-dl.facts dd { margin: 0; overflow-wrap: anywhere; }
-
-@media (max-width: 34rem) {
-  dl.facts { grid-template-columns: 1fr; gap: 0; }
-  dl.facts dt { margin-top: .7rem; }
-  dl.facts dd { margin-bottom: .2rem; }
-}
 
 pre {
   background: var(--panel);

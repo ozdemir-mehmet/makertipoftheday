@@ -51,7 +51,7 @@ outside that list.
 _tips/                one markdown file per tip (a Jekyll collection)
 assets/tips/          downloadable artifacts, one directory per tip
 _data/surfaces.yml    the surface vocabulary the validator and /all/ share
-_layouts/             the tip layout; _includes/ the shared partials, tip-status.html among them
+_layouts/             the tip layout; _includes/ the shared partials (surface-label.html)
 queue/                the publish-ready buffer plus the item template
 scripts/              validate_tips.py, reverify.py, preview.sh, test_gates.sh
 .github/workflows/    Pages build and deploy, and the nightly re-verify job

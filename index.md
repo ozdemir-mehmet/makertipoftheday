@@ -18,7 +18,7 @@ been executed and evidenced.</p>
     <a href="{{ tip.url | relative_url }}">{{ tip.title | escape }}</a>
     <span class="meta">
       <span class="surface">{% include surface-label.html surface=tip.surface %}</span>
-      {{ tip.date | date: "%d %b %Y" }} &middot; {% include tip-status.html tip=tip mode="line" %}
+      {{ tip.date | date: "%d %b %Y" }}
     </span>
   </li>
   {% endfor %}
