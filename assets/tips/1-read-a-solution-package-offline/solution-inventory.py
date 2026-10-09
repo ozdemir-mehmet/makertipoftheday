@@ -24,11 +24,12 @@ from pathlib import Path
 COMPONENT_TYPES = {
     1: "Entity (table)", 2: "Attribute (column)", 9: "Option Set", 10: "Entity Relationship",
     20: "Role", 26: "Saved Query (view)", 29: "Workflow (process)", 31: "Report",
-    60: "System Form", 61: "Web Resource", 62: "Site Map", 63: "Custom Control",
+    60: "System Form", 61: "Web Resource", 62: "Site Map", 63: "Connection Role",
     70: "Field Security Profile", 71: "Field Permission", 90: "Plugin Type",
     91: "Plugin Assembly", 92: "SDK Message Processing Step", 93: "SDK Message Processing Step Image",
     95: "Service Endpoint", 300: "Canvas App", 371: "Connector",
     380: "Environment Variable Definition", 381: "Environment Variable Value",
+    431: "Attribute Image Configuration", 432: "Entity Image Configuration",
 }
 
 # Web resource type numbers, from the webresource reference.
@@ -73,7 +74,7 @@ def inventory(path: Path) -> int:
     total = sum(types.values())
     print(f"  components   : {total}")
     for code, count in sorted(types.items(), key=lambda kv: -kv[1]):
-        label = COMPONENT_TYPES.get(int(code), f"type {code} - not in the documented component list")
+        label = COMPONENT_TYPES.get(int(code), f"type {code} - not listed by this script")
         print(f"    {count:>4}  {code:>4}  {label}")
 
     files = [n for n in names if n not in ("solution.xml", "customizations.xml", "[Content_Types].xml")]
