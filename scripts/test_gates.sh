@@ -265,7 +265,9 @@ expect "a sourced draft passes on the lighter schema" 0 "all gates pass" "$QUEUE
 write_draft 9997
 expect "a draft without a next step is rejected" 1 "missing required field 'next_step'" "$QUEUED"
 
-ready_on_disk=$(grep -l "^state: ready" "$ROOT"/queue/*.md 2>/dev/null | grep -vE "/(README|TEMPLATE)\.md$" | wc -l)
+# A queue with no ready items is a legitimate state, so this count must not fail the run: `grep -l`
+# exits 1 when nothing matches, and under `set -o pipefail` that aborts the whole suite.
+ready_on_disk=$(grep -l "^state: ready" "$ROOT"/queue/*.md 2>/dev/null | grep -vE "/(README|TEMPLATE)\.md$" | wc -l) || true
 reported=$(python3 "$ROOT/scripts/reverify.py" 2>&1 | grep -oE "queue [0-9]+ ready" | grep -oE "[0-9]+" || echo "")
 if [ -n "$reported" ] && [ "$ready_on_disk" = "$reported" ]; then
   echo "ok    drafts are excluded from the ready-queue depth ($reported ready)"
