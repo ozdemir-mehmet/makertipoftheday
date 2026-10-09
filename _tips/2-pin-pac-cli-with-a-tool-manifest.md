@@ -148,51 +148,60 @@ evidence: |
     prints "ok    no pac on PATH, so every pac command goes through the manifest" and exits 0)
 ---
 
-The pac CLI is what packs your solutions, unpacks them and imports your environment variables, and on
-most machines the version that runs is whichever one was installed last. `dotnet new tool-manifest`
-then `dotnet tool install Microsoft.PowerApps.CLI.Tool` turns it into a pinned dependency: the
-manifest goes into version control, and every machine and pipeline runs the same build through
-`dotnet tool restore`. The entry it writes carries the version and `"rollForward": false`, and that
-pair holds: with the manifest pinned to 2.11.2 while 2.13.1 was installed on the same machine,
-`dotnet tool run pac help` still reported 2.11.2. Nothing rolled forward onto the newer one.
+The pac CLI packs your solutions, unpacks them and imports your environment variables. On most machines,
+the version that runs is whichever one you installed last.
 
-Four things bite.
+`dotnet new tool-manifest` and `dotnet tool install Microsoft.PowerApps.CLI.Tool` change that. They put a
+manifest into version control, and every machine and pipeline then runs the same build through `dotnet
+tool restore`. The entry carries the version and `"rollForward": false`, and that pair holds: I pinned a
+manifest to 2.11.2 with 2.13.1 already installed on the same box, and `dotnet tool run pac help` still
+reported 2.11.2.
 
-The manifest is not where the blog posts put it. On .NET SDK 10.0.400, `dotnet new tool-manifest`
-writes `dotnet-tools.json` in the current directory - the repository root - and not
-`.config/dotnet-tools.json`. Both layouts restore - a manifest at `.config/dotnet-tools.json` with
-nothing at the root restored and ran the same 2.13.1 - and restore searches upwards, so a root
-manifest is found from a subdirectory. If a repository ends up with both, `.config/dotnet-tools.json`
-is the one that wins - worth knowing before you edit the root copy and watch nothing change. When
-there is none anywhere, the command does not fail: `dotnet tool restore` prints `Cannot find a manifest
-file. The list of searched paths:`, lists every place it looked, and exits 0. A pipeline step running it
+Here is what bit me on the way to a pin that works.
+
+## The manifest is not where the guides put it
+
+Every guide says `.config/dotnet-tools.json`. On .NET SDK 10.0.400, `dotnet new tool-manifest` writes
+`dotnet-tools.json` into the current directory instead - your repository root. Both layouts restore, and
+restore walks upwards, so a root manifest is still found from a subdirectory.
+
+If you end up with both files, `.config/dotnet-tools.json` is the one that wins. Edit the root copy and
+nothing changes.
+
+And when there is no manifest anywhere, the command does not fail. It prints `Cannot find a manifest
+file. The list of searched paths:`, lists every path it looked in, and exits 0. Your pipeline step
 passes, having restored nothing.
 
-Then there is the version check everybody writes. `pac --version` prints the banner, then
-`Error: Not a valid command. Try running 'pac [command] help'.` and exits 1 - a red build from the
-command with the most harmless name on the line. `pac help` exits 0 and carries the same `Version:`
-line. `dotnet tool run pac --help` is worse than either: the .NET tool runner takes `--help` for
-itself, prints its own usage and exits 0, so the step passes and tells you nothing about pac at all.
+## The version check that breaks a build
 
-The third is what a wrong pin does. Point the manifest at a version NuGet does not carry and
-`dotnet tool restore` fails - `Version 2.12.0 of package microsoft.powerapps.cli.tool is not found in
-NuGet feeds` - and pac then refuses to run: `Run "dotnet tool restore" to make the "pac" command
-available`. Correcting the version in the file and running `dotnet tool restore` fixes it, and
-`dotnet tool install Microsoft.PowerApps.CLI.Tool` rewrites the entry to the newest version without you
-editing anything. The pipeline stops either way, which is the outcome you want, but the message names the
-version and not the file you have to edit.
+`pac --version` looks harmless. It prints the banner, then `Error: Not a valid command. Try running 'pac
+[command] help'.` and exits 1 - a red build from the most innocent-looking line in the script.
 
-The fourth is a second pac on the same machine. With 2.11.2 installed globally while the
-manifest pinned 2.13.1, `which pac` resolved to `~/.dotnet/tools/pac` and a bare `pac help` reported
-2.11.2 - so the step that just types `pac ...` gets that one, and the manifest only governs the
-commands that go through `dotnet tool run`.
+`pac help` exits 0 and carries the same `Version:` line.
 
-One caveat before leaning on a manifest: this install is not the whole CLI. `pac data` is not a command
-at all in the .NET Tool build - `Error: Not a valid command` - and the `package` group it does have
-(`init`, `add-external-package`, `add-solution`, `add-reference`, `deploy`, `db-sync`) has no `show`.
-The vendor's install matrix puts those behind the Windows MSI or the VS Code extension. A manifest can
-pin pac; it cannot make the whole CLI available.
+`dotnet tool run pac --help` is worse than either. The .NET tool runner takes `--help` for itself,
+prints its own usage and exits 0, so the step passes and never mentions pac.
 
-The CLI you think you are running is the one packing and importing your work. An MSI on someone's
-laptop and a NuGet tool in the pipeline can disagree about behaviour without anyone changing anything,
-and the difference surfaces as a diff in a solution file nobody edited.
+## A pin the feed does not carry
+
+Point the manifest at a version NuGet does not have and `dotnet tool restore` fails: `Version 2.12.0 of
+package microsoft.powerapps.cli.tool is not found in NuGet feeds`. After that pac will not run at all -
+`Run "dotnet tool restore" to make the "pac" command available`.
+
+Fix the version in the file and run `dotnet tool restore`, or let `dotnet tool install
+Microsoft.PowerApps.CLI.Tool` rewrite the entry to the newest version for you. The pipeline stops either
+way, which is what you want - but the message names the version and not the file you have to edit.
+
+## The second pac on your machine
+
+A global install is a second pac, and it is the one your shell finds first. With 2.11.2 installed
+globally while the manifest pinned 2.13.1, `which pac` pointed at `~/.dotnet/tools/pac` and a bare `pac
+help` reported 2.11.2. A step that types `pac ...` gets that one. Only `dotnet tool run` honours the
+manifest.
+
+## What this install does not have
+
+`pac data` is not a command in the .NET Tool build at all - `Error: Not a valid command`. The `package`
+group it does have is `init`, `add-external-package`, `add-solution`, `add-reference`, `deploy` and
+`db-sync`, with no `show`. The vendor's install matrix puts those behind the Windows MSI or the VS Code
+extension. A manifest pins pac; it cannot add commands.

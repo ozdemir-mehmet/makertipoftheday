@@ -48,7 +48,7 @@ the zip to detect "did anything change" reports a change on every build. A PR th
 package shows a binary diff nobody can review. An artifact cache keyed on the file's hash misses every
 time. None of it is a change to your solution, and all of it looks like one.
 
-The fix is to compare the thing that carries meaning. Diff the unpacked folder - that is text, and it
+Compare the thing that carries meaning instead. Diff the unpacked folder - that is text, and it
 tells you which component moved. If you have to compare two packages, compare them member by member
 rather than byte by byte, because that is the comparison that answers the question you were asking.
 

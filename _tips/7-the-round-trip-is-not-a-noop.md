@@ -1,6 +1,6 @@
 ---
 title: "The round trip is not a no-op"
-summary: "Unpack a package and pack it back and you do not get the file you started with: the XML gains a declaration and a set of empty containers nobody added."
+summary: "Unpack a package and pack it back and you do not get the file you started with: the XML gains a declaration, the line endings change, and the empty containers come back collapsed."
 surface: cross-cutting
 tip_number: 7
 date: 2026-10-07
@@ -22,10 +22,11 @@ evidence: |
     original package : <ImportExportXml version="9.2.26083.148" SolutionPackageVersion="9.2" ...
     re-packed        : <?xml version="1.0" encoding="utf-8"?>
 
-  command: count the empty containers in customizations.xml
+  command: for n in Roles Workflows FieldSecurityProfiles; do grep -o "<$n[^>]*>" plain/customizations.xml s1/customizations.xml; done
   observed: |
-    original  <Roles /> 0   <Workflows /> 0   <FieldSecurityProfiles /> 0
-    re-packed <Roles /> 1   <Workflows /> 1   <FieldSecurityProfiles /> 1
+    original  <Roles>                  <Workflows>                  <FieldSecurityProfiles>
+    repacked  <Roles />                <Workflows />                <FieldSecurityProfiles />
+    (the same three elements in both files - open tags with nothing inside before, collapsed empties after)
 
   command: python3 roundtrip-diff.py plain s1
   observed: |
@@ -35,9 +36,10 @@ evidence: |
     customizations.xml
       first line, original: <ImportExportXml xmlns:xsi="http://www.w3.org/2001/X
       first line, repacked: <?xml version="1.0" encoding="utf-8"?>
-      <Roles />                  0 -> 1
-      <Workflows />              0 -> 1
-      <FieldSecurityProfiles />  0 -> 1
+      line endings: CRLF in the original, LF in the repacked file
+      Roles                  <Roles> -> <Roles />
+      Workflows              <Workflows> -> <Workflows />
+      FieldSecurityProfiles  <FieldSecurityProfiles> -> <FieldSecurityProfiles />
     the files differ
     exit: 1
 ---
@@ -55,11 +57,14 @@ carry:
 
     <?xml version="1.0" encoding="utf-8"?>
 
-`customizations.xml` comes back wearing three empty containers the original went without - `<Roles />`,
-`<Workflows />` and `<FieldSecurityProfiles />`, all at zero occurrences before and one after. In
+`customizations.xml` is the one that moves more. The original carries `<Roles>`, `<Workflows>` and
+`<FieldSecurityProfiles>` as open tags with nothing inside them, and all three come back collapsed to
+`<Roles />`, `<Workflows />` and `<FieldSecurityProfiles />`. The line endings change as well - the member
+inside the package is CRLF and the file you pack back is LF - which on its own is a whole-file diff, before
+you have changed anything. In
 Microsoft's sample neither a role, a workflow, nor a field security profile is anywhere in the package.
 
-None of that is your edit. It is the writer putting back the elements the reader elides, which means a
+You did not make any of those changes - the writer puts back the elements the reader elides. A
 diff between "the package I imported last week" and "the package I built today" is not a diff of the
 solution: the first line of the file differs even when you changed nothing.
 

@@ -69,9 +69,10 @@ you get nine files: components under `Entities/` with their forms and `RibbonDif
 and its site map under `AppModules/` and `AppModuleSiteMaps/`, web resources under `WebResources/` with
 their real extensions and a `.data.xml` sidecar each, and the two XML files under `Other/`.
 
-Four members in the package, nine files on disk, and no overlap in the names. So the working folder is
+Four members in the package, nine files on disk, and the resource that had no extension at all is now a
+`.js` file with a `.data.xml` sidecar beside it. So the working folder is
 always `pac solution unpack`, never `unzip` - and if your pipeline unzips a solution to get at a web
 resource, it is editing a folder that can never be packed back.
 
-The tell is cheap to check: if `solution.xml` is at the top of the folder you are about to pack, the
-packer is going to look for the one under `Other/` and fail on a file you can see.
+If `solution.xml` is sitting at the top of the folder you are about to pack, the packer is going to look
+for the one under `Other/` and fail on a file you can see.

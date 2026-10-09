@@ -52,10 +52,10 @@ It is the package's list of parts, written in the container's vocabulary rather 
     </Types>
 
 Three hundred and twenty-two bytes, naming the one part that is not an XML file, with a default that
-covers the ones that are. Microsoft's published package and the package you pack from its unpacked
-folder hold that file byte for byte - the same default, the same override, the same GUID.
+covers the ones that are. Pack the folder that package unpacked to, and this member comes back byte for
+byte - the same default, the same override, the same GUID, because it is one package compared with itself.
 
-The asymmetry is the part worth knowing. `pac solution unpack` never writes it, so it cannot live in
+`pac solution unpack` never writes it, so it cannot live in
 your repository and you cannot break it by editing the folder. `pac solution pack` always writes it, so
 it turns up in every artifact you build. It is the only member of the package that describes the
 package.

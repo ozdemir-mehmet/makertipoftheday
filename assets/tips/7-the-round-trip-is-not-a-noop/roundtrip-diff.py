@@ -3,7 +3,7 @@
 
 A round trip is not a no-op. Compare the package you started with against the one you packed back, and the
 differences are in the boilerplate rather than the payload: the re-packed solution.xml gains an XML
-declaration, and customizations.xml gains empty containers the original did not carry. Neither shows up in
+declaration, the line endings change, and customizations.xml's empty containers come back collapsed. Neither shows up in
 a diff of the unpacked tree, because both files are rewritten on the way out.
 
     python3 roundtrip-diff.py <original-extracted-folder> <repacked-extracted-folder>
@@ -16,7 +16,17 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-CONTAINERS = ("<Roles />", "<Workflows />", "<FieldSecurityProfiles />", "<Templates />", "<EntityMaps />")
+# Element names, not one spelling of them. The original writes <Roles> with nothing inside and the writer
+# emits <Roles /> - count only the self-closing form and you report a container appearing out of nowhere
+# when it was in the package all along.
+CONTAINERS = ("Roles", "Workflows", "FieldSecurityProfiles", "Templates", "EntityMaps")
+
+
+def container_form(text: str, name: str) -> str:
+    for spelling in (f"<{name} />", f"<{name}/>", f"<{name}>"):
+        if spelling in text:
+            return spelling
+    return "(absent)"
 
 
 def main() -> int:
@@ -38,10 +48,12 @@ def main() -> int:
         if (original / name).read_bytes() != (repacked / name).read_bytes():
             same = False
         if name == "customizations.xml":
+            if b"\r\n" in (original / name).read_bytes() and b"\r\n" not in (repacked / name).read_bytes():
+                print("  line endings: CRLF in the original, LF in the repacked file")
             for container in CONTAINERS:
-                was, now = before.count(container), after.count(container)
+                was, now = container_form(before, container), container_form(after, container)
                 if was != now:
-                    print(f"  {container:<26} {was} -> {now}")
+                    print(f"  {container:<22} {was} -> {now}")
 
     print("the files agree" if same else "the files differ")
     return 0 if same else 1

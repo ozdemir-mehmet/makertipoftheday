@@ -52,8 +52,8 @@ section, no badge, no re-verify date, no tested-against/environment/cost/artifac
 the listings publish no badge either. `scripts/preview.sh` asserts every one of those is ABSENT, in a
 fresh state and in a lapsed one, so the rule has a guard rather than a convention. Nothing in the body
 should read as proof either: no methodology recitals, no "measured across N tables", no long verbatim
-quotations from the source. Those belong in `evidence`. An artifact is linked from the body, at the
-point the tip uses it, because a reader can use a script and has no use for an inventory row.
+quotations from the source. Those belong in `evidence`. The artifact is internal too - it is how the claim was measured and how the tip gets re-verified - so a tip does not link it from the body. Whether the
+scripts are published at all is a separate decision that has not been taken.
 
 A front-matter value in double quotes cannot contain an escaped double quote - the validator's reader
 ends the value at the first closing quote and rejects what follows. If a value needs to quote

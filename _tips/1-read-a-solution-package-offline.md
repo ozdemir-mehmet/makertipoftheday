@@ -1,6 +1,6 @@
 ---
 title: "Read a solution package before you import it: three files and two things that lie to you"
-summary: "A Dataverse solution is a zip: three files tell you what you are about to import, and two of them mislead you if you read them the obvious way."
+summary: "A Dataverse solution is a zip: three files tell you what you are about to import, and two things inside them mislead you if you read them the obvious way."
 surface: dataverse
 tip_number: 1
 date: 2026-10-01
@@ -98,22 +98,24 @@ evidence: |
 ---
 
 A Dataverse solution is a zip file, and you can read it without an environment, a login or a single
-`pac` command. Three files inside it carry almost everything worth knowing before an import.
+`pac` command. Two files inside it carry most of what you need to know before an import.
 
 `solution.xml` is the identity: the unique name, the version, whether the package is managed, the
 publisher, and a `<RootComponents>` list in which every component is a type number and nothing more.
 `customizations.xml` is the payload - tables, columns, forms, views. `[Content_Types].xml` keeps
 SolutionPackager happy and tells you nothing.
 
-Two things in there mislead you if you read them the obvious way.
+## `customizations.xml` declares things the package does not carry
 
-The first is `customizations.xml` itself. It declares `Entities`, `Roles`, `Workflows` and
+It declares `Entities`, `Roles`, `Workflows` and
 `WebResources` whether or not the package carries any. Microsoft's metadata sample has three root
 components and not one of them is a table, yet its `<Entities>` element is there with nothing inside it
 - zero `<Entity>` elements in the file - which is enough for a quick look to conclude that the solution
 carries a table. What the package actually changes is `<RootComponents>` in `solution.xml`.
 
-The second is the web resource payload. Inside the zip a file is named after its logical name with the
+## The web resource payload has no extension
+
+Inside the zip a file is named after its logical name with the
 dot removed and the resource's uppercase GUID glued on: `example_form-script.js` becomes
 `WebResources/example_form-scriptjsAEFB6A9A-0EA4-F111-B8DC-7CED8DA8A791`. There is no extension, so
 editors, diff tools and packers each guess the type and each guess differently. The only honest source
@@ -121,7 +123,8 @@ is `<WebResourceType>`, where 3 means a script. The logical name is not a hint e
 metadata sample ships a resource called `sample_/metadatabrowser`, which carries no extension and is a
 web page.
 
-One more thing before you trust a component list: the published type table is not the whole set.
+## The published type table is not the whole set
+
 Microsoft's metadata sample declares type 80, the CoE starter kit ships nine of them, and the
 reference page has no row for 80 at all. Tooling that treats the documented list as exhaustive drops
 those components on the floor.

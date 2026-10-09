@@ -89,7 +89,8 @@ type. Beside it, the unpacker writes `example_form-script.js.data.xml`, and the 
 DisplayName is the name a maker sees.
 
 Now move that sidecar out of the way and pack. The packer prints `Packed Solution.` and exits 0. What it
-wrote is a package with three members - `customizations.xml`, `solution.xml`, `[Content_Types].xml` - where the
+wrote is a package with three members - `customizations.xml`, `solution.xml`,
+`[Content_Types].xml` - where the
 complete one had four, and `solution.xml` still declares the resource:
 
     type="61" schemaName="example_form-script.js" behavior="0"
