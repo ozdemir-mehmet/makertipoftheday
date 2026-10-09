@@ -2,7 +2,7 @@
 title: "You cannot block Dataverse with a DLP policy, and that is by design"
 summary: "Dataverse is the only premium connector a data policy cannot block, because the platform depends on it — the block list has exceptions and advanced connector policies are the way round them."
 surface: cross-cutting
-tip_number: 12
+tip_number: 24
 state: draft
 source: "https://learn.microsoft.com/en-us/power-platform/admin/dlp-connector-classification"
 next_step: "In a development tenant, create a data policy that classifies every connector as Blocked and confirm Dataverse remains usable, then repeat the attempt with advanced connector policies to see the difference."

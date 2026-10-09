@@ -2,7 +2,7 @@
 title: "Your lookup column is a GUID because you forgot to ask for its name"
 summary: "The Web API hands you `_primarycontactid_value` as a GUID unless you ask for annotations, and one request header puts the display name next to every lookup and option set."
 surface: dataverse
-tip_number: 3
+tip_number: 26
 state: draft
 source: "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query/overview"
 next_step: "Run the same GET twice against a development environment with `$select=name,primarycontactid,statecode,statuscode`, once without and once with the annotation header set to the FormattedValue annotation, and paste both responses into the evidence block."

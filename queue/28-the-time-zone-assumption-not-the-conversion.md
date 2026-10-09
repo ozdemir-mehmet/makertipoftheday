@@ -2,7 +2,7 @@
 title: "The time zone bug in your flow is the assumption, not the conversion"
 summary: "Connectors hand a flow datetimes in whichever zone they felt like, and the documented fix is naming the direction: `convertFromUtc` and `convertToUtc`."
 surface: power-platform
-tip_number: 5
+tip_number: 28
 state: draft
 source: "https://learn.microsoft.com/en-us/power-automate/convert-time-zone"
 next_step: "In a development environment, run a flow over a connector that returns local time and one that returns UTC, log both raw values, then convert each with `convertFromUtc` and paste the before and after into the evidence block."

@@ -2,7 +2,7 @@
 title: "Power Pages will not save a child permission that has a role its parent lacks"
 summary: "A child table permission must not carry a web role its parent permission does not have, and the designer refuses with a specific error rather than a warning."
 surface: power-platform
-tip_number: 8
+tip_number: 31
 state: draft
 source: "https://learn.microsoft.com/en-us/power-pages/security/table-permissions"
 next_step: "In a development site, give a child table permission a web role the parent does not have, capture the exact error from the designer, then align the roles and confirm the save."

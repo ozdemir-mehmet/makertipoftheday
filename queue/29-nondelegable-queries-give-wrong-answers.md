@@ -2,7 +2,7 @@
 title: "Your canvas app is not showing the first 500 rows, it is showing the wrong answer"
 summary: "One nondelegable operator in a Power Fx query makes the whole query local, so Power Apps reads the first 500 rows and filters those — silently, and with no error."
 surface: power-platform
-tip_number: 6
+tip_number: 29
 state: draft
 source: "https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/delegation-overview"
 next_step: "Point a development app at a table with more than 500 rows and 10 million is ideal but 5,000 will do, add a nondelegable operator such as `distinct` to the query, and compare the count the app shows against the same query in the data source."

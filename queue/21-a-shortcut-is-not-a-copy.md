@@ -2,7 +2,7 @@
 title: "A OneLake shortcut is not a copy, and that is the whole point"
 summary: "Shortcuts add selected data to the OneLake namespace without moving it; mirroring adds an external database or catalog and decides whether its data is read in place or replicated."
 surface: fabric
-tip_number: 9
+tip_number: 21
 state: draft
 source: "https://learn.microsoft.com/en-us/fabric/onelake/unify-data"
 next_step: "In a trial capacity, create a shortcut to a Dataverse table and, separately, mirror an external database, then compare storage consumed and data freshness for each."

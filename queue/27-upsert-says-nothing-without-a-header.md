@@ -2,7 +2,7 @@
 title: "Your upsert returns 204 whether it created or updated a record"
 summary: "A PATCH with `If-Match: *` is an upsert, and with no `Prefer` header the status is 204 No Content either way, so your sync code cannot tell an insert from an update."
 surface: dataverse
-tip_number: 4
+tip_number: 27
 state: draft
 source: "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/use-upsert-insert-update-record"
 next_step: "PATCH the same alternate-key URL twice against a development environment, first without and then with `Prefer: return=representation`, and paste the status codes into the evidence block."

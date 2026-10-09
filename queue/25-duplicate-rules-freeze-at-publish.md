@@ -2,7 +2,7 @@
 title: "Your duplicate detection rule stopped catching duplicates the day someone lengthened a field"
 summary: "A published rule builds matchcodes from the criteria as they were at publish time; lengthening a field in that criteria later goes undetected, so the rule keeps running and quietly stops matching."
 surface: dynamics-crm
-tip_number: 13
+tip_number: 25
 state: draft
 source: "https://learn.microsoft.com/en-us/power-platform/admin/detect-duplicate-data"
 next_step: "In a development environment, publish a duplicate detection rule over a short text field, then lengthen that field and create a near-duplicate record to confirm whether the rule still fires, and paste both attempts into the evidence block."

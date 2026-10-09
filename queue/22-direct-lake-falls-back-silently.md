@@ -2,7 +2,7 @@
 title: "Your Direct Lake model is running as DirectQuery and nothing told you"
 summary: "A Direct Lake model falls back to DirectQuery when it cannot read the Delta table directly — a SQL view is enough — and a semantic model property decides what happens next."
 surface: power-bi
-tip_number: 10
+tip_number: 22
 state: draft
 source: "https://learn.microsoft.com/en-us/fabric/fundamentals/direct-lake-overview"
 next_step: "In a trial workspace, publish a Direct Lake semantic model over a SQL view, then over the Delta table itself, and compare the storage mode reported for each in the model's properties."

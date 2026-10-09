@@ -2,7 +2,7 @@
 title: "Your agent answers from the URL you typed when you created it, in every topic"
 summary: "Generative answers answers when no topic matches, and agent-level knowledge is used in every feature, so a scoped topic can still be answered from somewhere else."
 surface: power-platform
-tip_number: 7
+tip_number: 30
 state: draft
 source: "https://learn.microsoft.com/en-us/microsoft-copilot-studio/nlu-boost-node"
 next_step: "In a trial agent, ask a question that matches no topic and record which knowledge source answered, then add a topic-level source and ask the same question again."
