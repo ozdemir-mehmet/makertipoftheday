@@ -49,12 +49,12 @@ evidence: |
     already resolves to the Microsoft 365 roadmap rather than to a release plan)
 
   command: python3 wave-refs.py /home/mozdemir/src/dataverse-solution-template
+  exited: 0
   observed: |
     === /home/mozdemir/src/dataverse-solution-template ===
       nothing named after a wave
 
     no file named a wave
-    exit: 0
 
   command: python3 wave-refs.py <the repository, with this tip's own two files removed>
   exited: 1
@@ -112,7 +112,7 @@ back clean, so this is not universal - it is the kind of thing you have to go lo
 ## The twice-a-year planning moment is yours to choose
 
 A wave gave every organisation the same two dates a year to gather stakeholders and plan a window. Nothing
-replaces that automatically. The roadmap gives you filters, CSV export, RSS per filtered view and stable
+replaces that automatically. The roadmap gives you filters, CSV export and RSS, and stable
 feature IDs, and it is continuous - so put a review rhythm in the calendar yourself, or the planning window
 quietly disappears.
 
@@ -122,5 +122,5 @@ what is coming, Message Center carries the tenant-relevant change notices for yo
 ## A board column will outlive the thing it is named after
 
 Release Planner is going. Export anything you still need from it, then replace release-plan links in your
-docs, pipeline comments and onboarding notes with links to the roadmap. Bookmarked release plans and pinned
-a "wave 1" board column is where I would start looking.
+docs, pipeline comments and onboarding notes with links to the roadmap. The bookmarked release plans and
+the pinned "wave 1" boards are where I would start looking.
