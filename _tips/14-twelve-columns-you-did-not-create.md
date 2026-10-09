@@ -84,34 +84,31 @@ evidence: |
     exit code: 1
 ---
 
-Twelve columns turn up on every Dataverse table you build and you did not create a single one of them:
-`createdby`, `createdon`, `createdonbehalfby`, `modifiedby`, `modifiedon`, `modifiedonbehalfby`,
+Every Dataverse table you build comes with twelve columns you did not create. They are `createdby`,
+`createdon`, `createdonbehalfby`, `modifiedby`, `modifiedon`, `modifiedonbehalfby`,
 `importsequencenumber`, `overriddencreatedon`, `statecode`, `statuscode`, `timezoneruleversionnumber`
-and `utcconversiontimezonecode`. Tables that use owners or business process flows carry eight more:
-`ownerid`, `owninguser`, `owningteam`, `owningbusinessunit`, `processid`, `stageid` and `traversedpath`.
+and `utcconversiontimezonecode`. A table that uses owners or business process flows carries eight
+more, and `ownerid`, `owninguser`, `owningteam`, `owningbusinessunit`, `processid`, `stageid` and
+`traversedpath` are the ones you will meet.
 
-The one to understand is `overriddencreatedon`, because it does not hold the date its name suggests.
-Map your source system's created-on column to it during an import and Dataverse writes that value into
-`createdon` - the column everyone actually reads - and stamps the import time into
-`overriddencreatedon` instead. Map nothing and `createdon` becomes the day you ran the import, while
-`overriddencreatedon` stays empty.
+`overriddencreatedon` is the one people get wrong. It does not hold the date its name suggests. Map
+your source system's created-on column to it during an import and Dataverse writes that value into
+`createdon` and puts the import time into `overriddencreatedon`. Map nothing and `createdon` becomes
+the day you ran the import while `overriddencreatedon` stays empty.
 
-Which means, after a migration, a report that reads `overriddencreatedon` as "when this was really
-created" is reading your migration date, and a report that reads `createdon` is right - even though
-the usual assumption is that a migration flattened it. The override also needs the
-`prvOverrideCreatedOnCreatedBy` privilege, and that is the ordinary reason one team's dates survive a
-migration while another's do not.
+So after a migration, a report that reads `overriddencreatedon` as the date a record was really
+created is reading your migration date, and a report that reads `createdon` is right, even though the
+usual assumption is that a migration flattened it. The override also needs the
+`prvOverrideCreatedOnCreatedBy` privilege. That is usually why one team's dates survive a migration
+and another team's do not.
 
-Two more on the list earn their keep:
+`importsequencenumber` does the same job for imports. Every import job stamps one sequence number on
+every record it creates, so a single number finds all the rows from one import when something goes
+wrong halfway through.
 
-- `importsequencenumber` is the audit handle for a single import. Each import job stamps one unique
-  sequence number on every record it creates, so that one number finds exactly the rows a run
-  produced - which is the question you have when an import goes wrong halfway through.
-- `utcconversiontimezonecode` and `timezoneruleversionnumber` are the platform's own time zone
-  bookkeeping. They sit idle on most tables.
+`utcconversiontimezonecode` and `timezoneruleversionnumber` are the platform's own time zone
+bookkeeping and sit idle on most tables.
 
-Where it pays: a migration that has to preserve original dates, a report where "created on" has to
-mean something, and a schema review where somebody is about to build a column that already exists.
-
-Want the list for your own tables? [table-columns.py](/assets/tips/14-twelve-columns-you-did-not-create/table-columns.py)
-prints it for any solution package you point it at.
+This matters most in two places: a migration that has to keep the original dates, and a report where
+"created on" is supposed to mean something. If you are about to build one of these twelve columns
+yourself, you almost certainly do not need to.
