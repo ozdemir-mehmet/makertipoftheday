@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Maker Tip Of The Day">
+  <title>The maker tip mark: a cog rising over a horizon</title>
+  <defs>
+    <clipPath id="aboveHorizon">
+      <rect x="0" y="0" width="64" height="44"/>
+    </clipPath>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="#14161a"/>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="14.5" fill="none" stroke="#ffffff" stroke-opacity="0.18"/>
+  <g clip-path="url(#aboveHorizon)">
+    <g fill="#ffffff">
+      <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(0 32 42)"/>
+      <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(45 32 42)"/>
+      <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(90 32 42)"/>
+      <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(135 32 42)"/>
+      <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(180 32 42)"/>
+      <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(225 32 42)"/>
+      <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(270 32 42)"/>
+      <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(315 32 42)"/>
+    </g>
+    <circle cx="32" cy="42" r="15" fill="#ffffff"/>
+    <circle cx="32" cy="42" r="5.5" fill="#0b5fff"/>
+  </g>
+  <rect x="8" y="44" width="48" height="5" rx="2.5" fill="#ffffff"/>
+</svg>

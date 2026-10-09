@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- Source for assets/img/og-default.png: 1200x630 social card, text baked (an image cannot use the site CSS).
+       Render with: rsvg-convert -w 1200 -h 630 assets/img/og-source.svg -o assets/img/og-default.png -->
+  <rect width="1200" height="630" fill="#fbfaf7"/>
+  <rect x="0" y="0" width="1200" height="8" fill="#0b5fff"/>
+  <g transform="translate(96, 150) scale(1.5)">
+    <rect width="64" height="64" rx="15" fill="#14161a"/>
+    <rect x="0.5" y="0.5" width="63" height="63" rx="14.5" fill="none" stroke="#ffffff" stroke-opacity="0.18"/>
+    <g clip-path="url(#ogHorizon)">
+      <g fill="#ffffff">
+        <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(0 32 42)"/>
+        <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(45 32 42)"/>
+        <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(90 32 42)"/>
+        <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(135 32 42)"/>
+        <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(180 32 42)"/>
+        <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(225 32 42)"/>
+        <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(270 32 42)"/>
+        <rect x="29" y="19" width="6" height="12" rx="2.5" transform="rotate(315 32 42)"/>
+      </g>
+      <circle cx="32" cy="42" r="15" fill="#ffffff"/>
+      <circle cx="32" cy="42" r="5.5" fill="#0b5fff"/>
+    </g>
+    <rect x="8" y="44" width="48" height="5" rx="2.5" fill="#ffffff"/>
+  </g>
+  <defs>
+    <clipPath id="ogHorizon"><rect x="0" y="0" width="64" height="44"/></clipPath>
+  </defs>
+  <text x="96" y="420" font-family="DejaVu Serif, Georgia, serif" font-size="86" font-weight="700"
+        fill="#14161a" letter-spacing="-2">Maker <tspan fill="#0b5fff">Tip</tspan> Of The Day</text>
+  <text x="98" y="482" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="34"
+        fill="#6a6f78">A tested tip for the Microsoft business-application stack</text>
+  <g font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="26" fill="#3f4855">
+    <rect x="96" y="530" width="210" height="44" rx="22" fill="#ece7fe"/>
+    <text x="118" y="559" fill="#4c2fd0">Dataverse</text>
+    <rect x="322" y="530" width="270" height="44" rx="22" fill="#dff5f2"/>
+    <text x="344" y="559" fill="#0b6b60">Power Platform</text>
+    <rect x="608" y="530" width="200" height="44" rx="22" fill="#fdf0dd"/>
+    <text x="630" y="559" fill="#8a4b06">Dynamics 365</text>
+  </g>
+</svg>

@@ -1,72 +1,148 @@
+/* Maker Tip Of The Day - one stylesheet, no build step.
+   Type: the whole ramp is one step down, and every size below is a step in that ramp - add a step,
+   never a new size. Colour: light and dark both come from these variables. */
+
 :root {
-  --fg: #1c1e21;
-  --muted: #5b6169;
-  --bg: #fdfdfc;
-  --panel: #f4f4f2;
-  --line: #dcdcd8;
-  --accent: #0b5fff;
-  --ok: #1a7f37;
+  --fg: #14161a;
+  --muted: #6a6f78;
+  --bg: #fbfaf7;
+  --panel: #f3f1ea;
+  --line: #e3e0d8;
+  --accent: #0b5fff;      /* the mark's blue, so the wordmark accent and the logo agree */
   --warn: #9a6700;
-  --bad: #b42318;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --serif: ui-serif, Georgia, "Iowan Old Style", "Source Serif 4", "Times New Roman", serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --fg: #e6e6e3;
-    --muted: #a2a8b0;
-    --bg: #16181c;
-    --panel: #1f2226;
-    --line: #32363c;
-    --accent: #7aa2ff;
-    --ok: #57c98a;
+    --fg: #ece9e3;
+    --muted: #9aa1ab;
+    --bg: #14161a;
+    --panel: #1c1f24;
+    --line: #2b2f36;
+    --accent: #8ab4f8;
     --warn: #e0b64a;
-    --bad: #ff8a80;
   }
 }
 
 * { box-sizing: border-box; }
 
-/* One step down: every size in this file is 0.9 of what it was. Add a step, not a new size. */
 body {
   margin: 0 auto;
   padding: 1.5rem 1.25rem 4rem;
-  max-width: 46rem;
-  font: 15.3px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* 42rem, not 46: the column is sized for the READING measure. Measured on the built page, ~700
+     characters in a body paragraph at 14.72px fill 8 lines of 25.32px, so this column runs to ~88
+     characters per line where 46rem ran to ~97. Narrowing further to 35rem would land near 78. */
+  max-width: 42rem;
+  font: 15.3px/1.6 var(--sans);
   color: var(--fg);
   background: var(--bg);
 }
 
 a { color: var(--accent); }
 
+/* ---- header: the mark, the name and tagline as text, the nav ---- */
 .site-header {
   border-bottom: 1px solid var(--line);
   padding-bottom: .9rem;
   margin-bottom: 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  flex-wrap: wrap;
+}
+.site-mark { display: block; width: 2.5rem; height: 2.5rem; flex: 0 0 auto; }
+/* the mark has a light and a dark twin, swapped by the media query on its <source>; the wrapper stays out
+   of the layout so the mark is sized like the flex child it would otherwise be. Scoped to the two places
+   that carry the mark: a <picture> in body copy should keep its own box. */
+.site-header picture, .site-footer picture { display: contents; }
+.site-names { display: flex; flex-direction: column; align-items: flex-start; }
+.site-title { font-family: var(--serif); font-size: 1.26rem; font-weight: 700; letter-spacing: -.02em;
+  text-decoration: none; color: var(--fg); }
+.site-title em { font-style: normal; color: var(--accent); }
+.site-tagline { display: block; color: var(--muted); font-size: .81rem; margin: .15rem 0 0; }
+.site-header nav { margin-left: auto; }
+.site-header nav a { margin-right: .9rem; font-size: .83rem; color: var(--muted); text-decoration: none; }
+.site-header nav a:last-child { margin-right: 0; }
+.site-header nav a:hover { color: var(--accent); }
+.site-header nav a[aria-current] { color: var(--fg); font-weight: 600; }
+
+/* ---- type ---- */
+h1 { font-family: var(--serif); font-size: clamp(1.53rem, 3.06vw, 2.12rem); line-height: 1.15;
+  letter-spacing: -.015em; margin: 0 0 .7rem; }
+h2 { font-family: var(--serif); font-size: 1.08rem; margin: 2rem 0 .6rem; }
+
+/* the reading size, for a tip body and for a standing page alike */
+main p, main ul li, main ol li { font-size: .92rem; line-height: 1.72; }
+
+.summary { font-size: 1.01rem; line-height: 1.55; color: var(--muted); margin: -.2rem 0 1.5rem;
+  border-left: 3px solid var(--line); padding-left: .9rem; }
+
+.kicker { display: flex; align-items: center; gap: .6rem; font-size: .72rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .08em; margin: 0 0 .7rem; }
+/* the separator between the chip, the number and the date is drawn by CSS rather than written into the
+   markup, so it cannot be left dangling by a field that is absent */
+.kicker > * + *::before { content: "\00b7"; margin-right: .6rem; }
+
+.readmore { display: inline-flex; align-items: center; gap: .4rem; font-weight: 600;
+  color: var(--accent); text-decoration: none; margin-top: .4rem; }
+.readmore:hover { text-decoration: underline; }
+
+/* ---- the surface chip: the display label, coloured by the surface it belongs to ---- */
+/* Uppercase is never set below .72rem (11.5px) anywhere in this file: at 10px an uppercase label
+   reads as dust. That is why the chip sits at .72rem rather than the mockup's .63rem, and why the
+   kicker and the pager's direction labels are .72rem too. */
+.surface { display: inline-block; border-radius: 999px; padding: .12rem .55rem; font-size: .72rem;
+  font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+  background: var(--panel); color: var(--muted); }
+.surface[data-s="dataverse"]      { background: #ece7fe; color: #4c2fd0; }
+.surface[data-s="power-platform"] { background: #dff5f2; color: #0b6b60; }
+.surface[data-s="dynamics-crm"]   { background: #fdf0dd; color: #8a4b06; }
+.surface[data-s="extensibility"]  { background: #eceef2; color: #3f4855; }
+.surface[data-s="fabric"]         { background: #e2eefb; color: #0d4a7a; }
+.surface[data-s="power-bi"]       { background: #fbf3d6; color: #7a5a06; }
+.surface[data-s="cross-cutting"]  { background: #fbe6ea; color: #8c1230; }
+
+@media (prefers-color-scheme: dark) {
+  .surface[data-s="dataverse"]      { background: #2a2350; color: #c3b6ff; }
+  .surface[data-s="power-platform"] { background: #123f3a; color: #7fe0d1; }
+  .surface[data-s="dynamics-crm"]   { background: #43310f; color: #f0c67a; }
+  .surface[data-s="extensibility"]  { background: #2b3038; color: #c3cbd6; }
+  .surface[data-s="fabric"]         { background: #12314d; color: #9ecbff; }
+  .surface[data-s="power-bi"]       { background: #3d330d; color: #e6d17a; }
+  .surface[data-s="cross-cutting"]  { background: #46141f; color: #ffa8b8; }
 }
 
-.site-title { font-weight: 700; font-size: 1.04rem; text-decoration: none; color: var(--fg); }
-.site-tagline { display: block; color: var(--muted); font-size: .81rem; margin: .2rem 0 .6rem; }
-.site-header nav a { margin-right: .9rem; font-size: .83rem; }
+/* ---- a labelled stretch of the feed ---- */
+.section-head { display: flex; align-items: baseline; gap: .8rem; margin: 2.6rem 0 .8rem;
+  border-bottom: 2px solid var(--fg); padding-bottom: .45rem; }
+.section-head h2 { font-size: 1.04rem; margin: 0; letter-spacing: -.01em; }
+.section-head span { margin-left: auto; color: var(--muted); font-size: .74rem; }
 
-h1 { font-size: 1.44rem; line-height: 1.25; margin: 0 0 .4rem; }
-h2 { font-size: 1.08rem; margin-top: 2rem; }
+ul.feed { list-style: none; padding: 0; margin: 0; }
+ul.feed li { display: grid; grid-template-columns: 7.5rem 1fr auto; gap: .8rem; align-items: baseline;
+  padding: .7rem 0; border-bottom: 1px solid var(--line); }
+ul.feed .when { color: var(--muted); font-size: .72rem; font-variant-numeric: tabular-nums; }
+ul.feed .what { font-family: var(--serif); font-size: .95rem; line-height: 1.35; }
+ul.feed .what a { color: var(--fg); text-decoration: none; }
+ul.feed .what a:hover { color: var(--accent); text-decoration: underline; }
 
-.tip-list { list-style: none; padding: 0; }
-.tip-list li { padding: .85rem 0; border-bottom: 1px solid var(--line); }
-.tip-list .meta { display: block; color: var(--muted); font-size: .77rem; }
+.group { margin: 0 0 1.8rem; }
+.group h2 { font-size: .99rem; margin: .9rem 0 .1rem; }
+.group .count { color: var(--muted); font-size: .74rem; margin: 0 0 .5rem; }
 
-/* held at .72rem: uppercase meta below ~11px stops being readable */
-.surface {
-  display: inline-block;
-  font-size: .72rem;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: .1rem .5rem;
-  color: var(--muted);
-}
+/* ---- a tip's own page ---- */
+.pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 2.6rem;
+  border-top: 1px solid var(--line); padding-top: 1rem; font-size: .83rem; }
+.pager a { text-decoration: none; }
+.pager a:hover { text-decoration: underline; }
+.pager .next { margin-left: auto; text-align: right; }
+.pager .dir { display: block; color: var(--muted); font-size: .72rem; text-transform: uppercase;
+  letter-spacing: .08em; }
 
+/* ---- notices, code, footer, print ---- */
 .notice { border-left: 3px solid var(--warn); background: var(--panel); padding: .75rem 1rem; margin: 1.25rem 0; }
 
 pre {
@@ -79,17 +155,22 @@ pre {
   line-height: 1.5;
 }
 
-code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .9em; }
+code { font-family: var(--mono); font-size: .9em; }
 
 /* a code block sets its own size: without this, `.9em` scales against `pre` and compounds the step */
 pre code { font-size: 1em; }
 
-.tip .summary { font-size: .95rem; color: var(--muted); margin: -.2rem 0 1rem; }
-
-.site-footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .77rem; }
+.site-footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line);
+  color: var(--muted); font-size: .77rem; }
+.site-footer p { margin: .5rem 0; }
+.site-footer .mark { display: flex; align-items: center; gap: .6rem; }
+.site-footer img { width: 26px; height: 26px; flex: 0 0 auto; }
 
 @media print {
   :root { --fg: #000; --muted: #333; --bg: #fff; --panel: #fff; --line: #999; }
   body { max-width: none; padding: 0; }
   .site-header nav, .site-footer { display: none; }
+  /* the chips are hard-coded per surface, so the palette reset above does not reach them; this rule is
+     after them in the file and matches them on specificity, so it wins */
+  .surface[data-s] { background: none; color: #333; padding: 0; }
 }

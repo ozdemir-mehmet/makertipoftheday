@@ -1,9 +1,15 @@
 <header class="site-header">
-  <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
-  <span class="site-tagline">{{ site.tagline }}</span>
-  <nav>
-    <a href="{{ '/' | relative_url }}">Latest</a>
-    <a href="{{ '/all/' | relative_url }}">All tips</a>
-    <a href="{{ '/about/' | relative_url }}">About</a>
+  <picture>
+    <source srcset="{{ '/assets/img/mark-dark.svg' | relative_url }}" media="(prefers-color-scheme: dark)">
+    <img class="site-mark" src="{{ '/assets/img/mark.svg' | relative_url }}" alt="" width="40" height="40">
+  </picture>
+  <div class="site-names">
+    <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title | escape | replace: 'Tip', '<em>Tip</em>' }}</a>
+    <span class="site-tagline">{{ site.tagline | escape }}</span>
+  </div>
+  <nav aria-label="Sections">
+    <a href="{{ '/' | relative_url }}"{% if page.url == '/' %} aria-current="page"{% endif %}>Latest</a>
+    <a href="{{ '/all/' | relative_url }}"{% if page.url == '/all/' %} aria-current="page"{% endif %}>All tips</a>
+    <a href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% endif %}>About</a>
   </nav>
 </header>

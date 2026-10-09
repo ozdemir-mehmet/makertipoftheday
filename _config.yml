@@ -1,9 +1,8 @@
 title: Maker Tip Of The Day
 tagline: Daily, verified tips for the Microsoft business-application stack
 description: >-
-  Short, verified tips for the Microsoft business-application stack. Every tip ships a runnable
-  artifact, the environment it was tested in, and an expiry date. The surfaces covered are listed in
-  the README and in about.
+  Short, tested tips for the Microsoft business-application stack, published as they are verified.
+  The surfaces covered are listed in about.
 url: https://makertipoftheday.com
 baseurl: ""
 lang: en

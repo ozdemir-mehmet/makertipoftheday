@@ -1,10 +1,15 @@
 <footer class="site-footer">
-  <p>
-    Tips are verified against a pinned build and carry an expiry date. A tip past its expiry is
-    marked, not silently served stale.
+  <p class="mark">
+    <picture>
+      <source srcset="{{ '/assets/img/mark-dark.svg' | relative_url }}" media="(prefers-color-scheme: dark)">
+      <img src="{{ '/assets/img/mark.svg' | relative_url }}" alt="" width="26" height="26">
+    </picture>
+    <span>{{ site.title | escape }} &middot; {{ site.tagline | escape }}</span>
   </p>
   <p>
-    <a href="{{ '/about/' | relative_url }}">How tips are verified</a> &middot;
+    <a href="{{ '/' | relative_url }}">Latest</a> &middot;
+    <a href="{{ '/all/' | relative_url }}">All tips</a> &middot;
+    <a href="{{ '/about/' | relative_url }}">About</a> &middot;
     <a href="{{ '/feed.xml' | relative_url }}">Feed</a> &middot;
     <a href="{{ '/sitemap.xml' | relative_url }}">Sitemap</a>
   </p>

@@ -7,18 +7,24 @@ tested-against/environment/cost/artifact/source strip. The verification fields l
 and are read by scripts/reverify.py and by whoever reviews the tip. There is no `example`/`_drafts`
 branch because validate_tips.py rejects a `published:` key and an `example:` key under _tips/ and
 refuses a `_drafts/` folder, so there would be nothing for the layout to render.
+
+The pager walks the collection by date. `pos` stays unset for a page that is not in it, and the
+pager is wrapped in a guard on that index, so an unset index cannot wrap around to a real
+neighbour.
 {%- endcomment -%}
+{% assign ordered = site.tips | sort: "date" %}
+{% for t in ordered %}{% if t.url == page.url %}{% assign pos = forloop.index0 %}{% endif %}{% endfor %}
 
 <article class="tip">
+  <p class="kicker">
+    <span class="surface" data-s="{{ page.surface | escape }}">{% include surface-label.html surface=page.surface %}</span>
+    {% if page.tip_number %}<span>Tip #{{ page.tip_number | escape }}</span>{% endif %}
+    {% if page.date %}<time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%-d %b %Y" }}</time>{% endif %}
+  </p>
+
   <h1>{{ page.title | escape }}</h1>
 
   {% if page.summary %}<p class="summary">{{ page.summary | escape }}</p>{% endif %}
-
-  <p class="meta">
-    <span class="surface">{% include surface-label.html surface=page.surface %}</span>
-    {% if page.tip_number %}<span> Tip #{{ page.tip_number }}</span>{% endif %}
-    {% if page.date %}<span> &middot; <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d %b %Y" }}</time></span>{% endif %}
-  </p>
 
   {{ content }}
 
@@ -27,9 +33,28 @@ refuses a `_drafts/` folder, so there would be nothing for the layout to render.
   tested-against line, the environment, the cost, the artifact path and the source link were all
   published once and are not any more: a reader gets the tip and nothing about how it was checked.
   Those fields stay in front matter - `evidence` carries the commands and the pasted output, the rest
-  carries what it was checked against - and they are for the reviewer and the nightly job. An artifact
-  is linked from the body, at the point the tip uses it.
+  carries what it was checked against - and they are for the reviewer and the nightly job.
   {%- endcomment -%}
 
-  <p><a href="{{ '/all/' | relative_url }}">All tips</a></p>
+  {% if pos %}
+  <nav class="pager" aria-label="Tips">
+    {%- comment -%}
+    `ordered` is ascending by date, so the neighbour below this tip is older. Both sides are guarded:
+    walking off either end must render nothing. Liquid resolves a negative index from the end of the
+    array and wraps, so an unguarded `minus: 1` hands the oldest tip the newest one - and hands the only
+    tip its own page back. Indexing past the far end yields nil.
+    {%- endcomment -%}
+    {% assign older_i = pos | minus: 1 %}
+    {% assign newer_i = pos | plus: 1 %}
+    {% if older_i >= 0 %}{% assign older = ordered[older_i] %}{% endif %}
+    {% if newer_i < ordered.size %}{% assign newer = ordered[newer_i] %}{% endif %}
+    {% if older %}<a href="{{ older.url | relative_url }}"><span class="dir">&larr; Older tip</span>{{ older.title | escape }}</a>{% endif %}
+    {% if newer %}<a class="next" href="{{ newer.url | relative_url }}"><span class="dir">Newer tip &rarr;</span>{{ newer.title | escape }}</a>{% endif %}
+    {% unless older or newer %}
+    <a href="{{ '/all/' | relative_url }}"><span class="dir">The only one so far</span>All tips</a>
+    {% endunless %}
+  </nav>
+  {% else %}
+  <nav class="pager" aria-label="Tips"><a href="{{ '/all/' | relative_url }}"><span class="dir">Browse</span>All tips</a></nav>
+  {% endif %}
 </article>
