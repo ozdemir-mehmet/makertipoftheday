@@ -29,6 +29,10 @@ if [ -e "$REPORT" ]; then
   mv "$REPORT" "$REPORT_BACKUP"
 fi
 
+# These directories are empty in the repository and git does not carry empty directories, so a fresh
+# clone has neither: the fixtures have to be able to create the ground they are written into.
+mkdir -p "$ROOT/_tips" "$ROOT/queue"
+
 for existing in "$DOC" "$ODD" "$QUEUED" "$LINK" "$REPORT.bak"; do
   if [ -e "$existing" ]; then
     echo "Refusing to run: $existing already exists and this test would overwrite it." >&2

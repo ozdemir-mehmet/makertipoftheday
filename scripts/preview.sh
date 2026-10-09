@@ -32,6 +32,7 @@ trap cleanup EXIT
 # from the copy: the listings are asserted on, and a published tip's own "verified" badge would make
 # the lapsed-tip assertion match a different document. Tip number 99 is reserved for this check.
 (cd "$ROOT" && tar -cf - --exclude=./.git --exclude=./_site --exclude=./.jekyll-cache .) | (cd "$SRC" && tar -xf -)
+mkdir -p "$SRC/_tips"
 rm -f "$SRC"/_tips/*.md
 
 write_doc() { # write_doc <expires_on>
