@@ -1,8 +1,9 @@
 # Maker Tip Of The Day
 
 Daily, verified tips for the Microsoft business-application stack: Dataverse, Power Platform
-(Power Apps, Power Automate, Power Pages, Copilot Studio), Dynamics 365 CRM, Microsoft Fabric and
-Power BI.
+(Power Apps, Power Automate, Power Pages, Copilot Studio), Dynamics 365 CRM, extensibility and
+tooling (PCF, XrmToolBox, PRT, CMT), Microsoft Fabric, Power BI, and cross-cutting ALM, governance
+and licensing.
 
 Successor in spirit to [crmtipoftheday.com](https://crmtipoftheday.com/) (1462 tips, dormant since
 June 2024), rebuilt for a stack that now ships on a release-wave cadence.
@@ -33,26 +34,37 @@ Rules every tip in this repository must satisfy:
 | Power Platform | Power Apps (canvas, model-driven, custom pages), Power Automate (cloud and desktop flows, process mining and process intelligence), Power Pages, Copilot Studio agents |
 | Dynamics 365 CRM | Sales, Customer Service, Field Service, Contact Center, Customer Insights |
 | Extensibility and tooling | client scripting and Xrm, PCF, FetchXML Builder, Ribbon Workbench, XrmToolBox, PRT, CMT |
-| Fabric | OneLake, Lakehouse/Warehouse, Data Factory, Real-Time Intelligence, Direct Lake, OneLake shortcuts to Dataverse |
+| Microsoft Fabric | OneLake, Lakehouse/Warehouse, Data Factory, Real-Time Intelligence, Direct Lake, OneLake shortcuts to Dataverse |
 | Power BI | semantic models, reports, Copilot |
 | Cross-cutting | ALM (solutions, pipelines, managed environments, pac CLI), governance (DLP, CoE Toolkit, Purview), licensing and capacity |
 
 Out of scope: Business Central (AL) and Finance & Operations (X++) - this is the CRM-side Dynamics
 stack, not ERP.
 
+The vocabulary itself lives in one file, `_data/surfaces.yml`: `surface:` in a tip's front matter has
+to be one of those slugs, `/all/` groups by them, and `scripts/validate_tips.py` rejects any value
+outside that list.
+
 ## Repository layout
 
 ```
-tips/                 one directory per tip: index.md + artifacts/
-site/                 static site generator input (built in Actions, published to GitHub Pages)
-.github/workflows/    build + deploy, and the scheduled re-verify job
-references/           build/wave version pins used by the re-verify job
+_tips/                one markdown file per tip (a Jekyll collection)
+assets/tips/          downloadable artifacts, one directory per tip
+_data/surfaces.yml    the surface vocabulary the validator and /all/ share
+_layouts/             the tip layout; _includes/ the shared partials, tip-status.html among them
+queue/                the publish-ready buffer plus the item template
+scripts/              validate_tips.py, reverify.py, preview.sh, test_gates.sh
+.github/workflows/    Pages build and deploy, and the nightly re-verify job
 ```
 
 ## Status
 
-Skeleton only. The static site, the tip corpus, the re-verify workflow and the MCP endpoint are not
-built yet.
+The static site is built and the gates are enforced in CI: the Jekyll site, the tip layout, the front
+matter validator, the nightly re-verify job and the Pages workflow are all in place and exercised
+locally. No tip has been published yet, so the home page ships the empty state.
+
+Outstanding: the MCP endpoint over the tip corpus, and pointing DNS at Pages once the first tip
+lands.
 
 ## Licence
 

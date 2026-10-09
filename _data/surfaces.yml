@@ -1,0 +1,20 @@
+# The surface vocabulary, in the order the site lists them.
+#
+# This file is the single source of truth: scripts/validate_tips.py validates `surface:` against these
+# slugs and /all/ groups by them, so a bucket cannot exist in one place and not the other. Adding a
+# surface here is the whole change - the README table, the front matter comment and the grouping all
+# follow from it.
+- slug: dataverse
+  label: Dataverse
+- slug: power-platform
+  label: Power Platform
+- slug: dynamics-crm
+  label: Dynamics 365 CRM
+- slug: extensibility
+  label: Extensibility and tooling
+- slug: fabric
+  label: Microsoft Fabric
+- slug: power-bi
+  label: Power BI
+- slug: cross-cutting
+  label: Cross-cutting

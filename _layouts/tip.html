@@ -1,0 +1,48 @@
+---
+layout: default
+---
+{%- comment -%}
+The verification badge and the past-expiry notice both come from _includes/tip-status.html, so this
+page and the listings cannot disagree about whether a tip is still verified. There is no
+`example`/`_drafts` branch because validate_tips.py rejects a `published:` key and an `example:` key
+under _tips/ and refuses a `_drafts/` folder, so there would be nothing for the layout to render.
+{%- endcomment -%}
+
+<article class="tip">
+  <h1>{{ page.title | escape }}</h1>
+
+  <p class="meta">
+    <span class="surface">{% include surface-label.html surface=page.surface %}</span>
+    {% if page.tip_number %}<span> Tip #{{ page.tip_number }}</span>{% endif %}
+    {% if page.date %}<span> &middot; <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d %b %Y" }}</time></span>{% endif %}
+  </p>
+
+  {% include tip-status.html tip=page mode="full" %}
+
+  {%- comment -%}Every interpolated value is escaped, including attributes: a query string in a
+  source URL carries an &amp; that breaks the markup unescaped.{%- endcomment -%}
+  <dl class="facts">
+    <dt>Tested against</dt>
+    <dd>{{ page.wave | escape }}{% if page.build %} (build {{ page.build | escape }}){% endif %}</dd>
+
+    {% if page.verified_env %}<dt>Environment</dt><dd>{{ page.verified_env | escape }}</dd>{% endif %}
+    {% if page.cost %}<dt>Licence and cost</dt><dd>{{ page.cost | escape }}</dd>{% endif %}
+    {% if page.artifact %}<dt>Artifact</dt><dd>
+      {%- if page.artifact == "none" -%}
+        none - this tip is configuration only
+      {%- else -%}
+        <a href="{{ page.artifact | relative_url | escape }}"><code>{{ page.artifact | escape }}</code></a>
+      {%- endif -%}
+    </dd>{% endif %}
+    {% if page.source %}<dt>Primary source</dt><dd><a href="{{ page.source | escape }}">{{ page.source | escape }}</a></dd>{% endif %}
+  </dl>
+
+  {{ content }}
+
+  {% if page.evidence %}
+  <h2>Evidence</h2>
+  <pre>{{ page.evidence | strip | escape }}</pre>
+  {% endif %}
+
+  <p><a href="{{ '/all/' | relative_url }}">All tips</a></p>
+</article>

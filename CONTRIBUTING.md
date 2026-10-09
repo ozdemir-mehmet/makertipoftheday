@@ -1,0 +1,110 @@
+# Contributing
+
+A tip is published only after it clears every gate below, in order. The gates are enforced where
+they can be: `scripts/validate_tips.py` runs in CI before the site builds, and `scripts/reverify.py`
+runs nightly.
+
+## Gates
+
+| # | Gate | What it means | Enforced by |
+|---|------|---------------|-------------|
+| 1 | Provenance | A primary source is cited - a Learn page, a documentation diff, a release note | `validate_tips.py` (source required, must be http(s)) |
+| 2 | Executed | The artifact was run against a pinned environment; the post carries the command and the observed output | `validate_tips.py` (evidence block must contain `observed`) |
+| 3 | Reproducible | Clean-room deploy with no manual steps, or every manual step enumerated | Reviewer |
+| 4 | Fresh | Expiry no further out than one release wave (183 days cap) | `validate_tips.py`, `reverify.py` |
+| 5 | Terminology | Names checked against the vendor's own page on the day of publishing | Reviewer with the vendor page open |
+| 6 | Cost and supportability | Licence and premium dependency stated; unsupported configuration labelled | `validate_tips.py` (cost required) |
+| 7 | Sanitised | No tenant names, environment URLs, identifiers or customer data | `validate_tips.py` (blocks organisation endpoints - `*.crm*.dynamics.com`, make.powerapps.com, app.powerbi.com, app.fabric.microsoft.com, `*.sharepoint.com` - and email addresses, over the whole file) |
+| 8 | Editorial | One mechanism, tl;dr, gotcha, evidence | Reviewer, against the template |
+| 9 | Reviewed | Two independent reviewers over the text. Catches structure and consistency, never truth | `agent-code-review` loop, both at zero |
+| 10 | Approved and rendered | Published from a preview, checked as rendered, then promoted | Merge to `main` |
+
+## Front matter
+
+```yaml
+---
+title: "Short, specific, no clickbait"
+surface: dataverse          # a slug from _data/surfaces.yml - the one place the vocabulary lives
+tip_number: 42
+date: 2026-10-09            # the publish date; the feed dates entries from it and the listings order by it
+wave: "2026 wave 1"
+build: "9.2.26094.00"        # optional; the build verified against
+verified_on: 2026-10-09
+verified_env: "developer environment, one region, default security roles"
+expires_on: 2027-04-01
+cost: "Free - no premium connector, no capacity add-on"
+source: "https://learn.microsoft.com/..."
+artifact: "assets/tips/42-slug/solution.zip"   # or none
+evidence: |
+  command: ...
+  observed: ...
+---
+```
+
+File naming: `_tips/<tip_number>-<slug>.md` - the `_tips` folder is a Jekyll collection, so documents
+render at `/tip/<file name without extension>/`. Artifacts live separately under
+`assets/tips/<tip_number>-<slug>/` because `_tips/` is never copied into the built site, and an
+artifact has to be downloadable. Tip numbers are unique and never reused.
+
+## What the validator refuses
+
+These are file-level rules, checked in both the named-path and whole-corpus runs:
+
+Do not use `published: false` or a `_drafts/` folder to park a document. `published: false` takes the
+document out of the collection entirely - no page is written and its URL 404s - and Jekyll accepts
+several spellings of false (`False`, `no`, `off`), so the failure is silent. A `_drafts/` document is
+treated as a post. `scripts/validate_tips.py` rejects both, and the tip layout has no branch to
+render them, because a tip that vanishes from the site with no error is the worst outcome this
+repository can produce.
+
+An `example:` key is rejected for the same reason: it was the flag on the shape reference, and the
+shape reference is now `queue/TEMPLATE.md`, which the validator skips by name. Nothing under `_tips/`
+carries it, and `scripts/preview.sh` renders a throwaway tip when the layout needs checking.
+
+A document must be a file, not a symlink. The validator refuses a symlinked document in both the
+scoped and whole-corpus paths: git would store the link rather than the content, Jekyll would index it
+under the link's name while the validator checked the target's, and a checkout on a platform without
+symlink support would have no file there at all. Commit the file itself.
+
+## Adding a tip
+
+1. Write it into `queue/<tip_number>-<slug>.md` first, in the shape above, and mark it `state: ready`
+   only when the artifact has actually been run and the evidence block holds the real output.
+2. When it is due to publish, move it to `_tips/` and make two edits: **drop `state:`** (that key is
+   queue-only and the validator rejects unknown keys in a tip) and add `date:` - the publish date -
+   after re-running the artifact. The verification clock starts at publish, so `verified_on` is the
+   day you re-ran it. `date` is the one field a queued item does not carry.
+3. Run `python3 scripts/validate_tips.py` and `python3 scripts/reverify.py` locally.
+4. Open a PR. Two independent reviewers must return zero findings on the frozen revision.
+5. Merge to `main`: the workflow validates, builds and deploys.
+
+## Buffer
+
+Target 10 ready items in `queue/`, alarm at 5. See `queue/README.md` for why a queued item is
+finished work and why the clock starts at publish.
+
+## Local build and checks
+
+```bash
+jekyll build                          # the published site, in _site/
+jekyll build --destination /tmp/site  # the same, without touching _site/
+./scripts/preview.sh                  # throwaway tip; asserts the layout in both expiry states
+python3 scripts/validate_tips.py      # the whole corpus; pass _tips/<file>.md to check one document
+python3 scripts/reverify.py           # 0 = nothing due, 10 = something lapsed, anything else = it crashed
+./scripts/test_gates.sh               # proves each mechanical gate actually fires
+```
+
+The deployed build is not the local build. CI uses `actions/jekyll-build-pages@v1`, which is Jekyll
+3.10 with the GitHub Pages plugin allowlist; a developer's machine may have Jekyll 4. Keep to Liquid
+and configuration that both understand - anything newer is a defect, not a convenience. CI is the
+authority on what the site renders, and `preview.sh` is the local smoke test.
+
+CI runs `validate_tips.py`, then `test_gates.sh`, then the build. `preview.sh` is deliberately local
+only: it needs a Jekyll on the runner that the Pages action installs inside itself rather than on the
+path, and a job that cannot be rehearsed locally is a job that breaks the deploy on its first push.
+
+`reverify.py`'s exit codes matter to the nightly workflow: 10 means something lapsed and an issue is
+opened, while any other non-zero code (including the 1 Python returns for an uncaught exception)
+means the check itself failed and the run is failed instead. `validate_tips.py` splits the same way:
+1 is a document that fails a gate, 2 is the validator itself being unable to run - a missing
+`_data/surfaces.yml`, say - and the test suite proves that path too.

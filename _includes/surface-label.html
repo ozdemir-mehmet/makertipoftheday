@@ -1,0 +1,10 @@
+{%- comment -%}
+Renders the display label for a surface slug from _data/surfaces.yml, so the chip on a listing and on a
+tip page reads "Power Platform" rather than the slug. Falls back to the slug itself, which keeps an
+unmapped value visible instead of blank; validate_tips.py rejects an unknown slug, so the fallback only
+appears while a draft is being built unvalidated locally.
+
+  {% include surface-label.html surface=tip.surface %}
+{%- endcomment -%}
+{%- assign surface_meta = site.data.surfaces | where: "slug", include.surface | first -%}
+{{- surface_meta.label | default: include.surface -}}

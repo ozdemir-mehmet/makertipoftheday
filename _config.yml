@@ -1,0 +1,47 @@
+title: Maker Tip Of The Day
+tagline: Daily, verified tips for the Microsoft business-application stack
+description: >-
+  Short, verified tips for the Microsoft business-application stack. Every tip ships a runnable
+  artifact, the environment it was tested in, and an expiry date. The surfaces covered are listed in
+  the README and in about.
+url: https://makertipoftheday.com
+baseurl: ""
+lang: en
+timezone: Australia/Sydney
+
+collections:
+  tips:
+    output: true
+    permalink: /tip/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: tips
+    values:
+      layout: tip
+
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# jekyll-feed puts the Posts collection at /feed.xml and anything listed under `collections` at
+# /feed/<name>.xml, and it never mixes them. This site publishes no posts, so the default feed would
+# be an empty file forever: move it aside and put the tips where the readers look.
+feed:
+  path: "/feed/posts.xml"
+  collections:
+    tips:
+      path: "/feed.xml"
+
+# Repo-side material that must not be published to the site.
+exclude:
+  - .github
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - scripts
+  - queue
+  - CONTRIBUTING.md
+  - README.md
+  - reverify-report.md
