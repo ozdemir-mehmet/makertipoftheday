@@ -2,7 +2,7 @@
 title: "Your table has twelve columns you did not create, and one of them rewrites Created On"
 summary: "Every Dataverse table carries twelve columns nobody created - and mapping a source date to overriddencreatedon puts it in createdon instead."
 surface: dataverse
-tip_number: 14
+tip_number: 9
 date: 2026-10-09
 wave: "n/a - solution package format; release waves were retired in September 2026"
 build: "CenterofExcellenceCoreComponents 4.50.9 managed, MetadataBrowser 4.0.0.0 managed"
@@ -11,7 +11,7 @@ verified_env: "Linux, Python 3.14.7 - no environment, no login; read from publis
 expires_on: 2027-03-31
 cost: "Free - no premium connector, no capacity; overriding Created On needs prvOverrideCreatedOnCreatedBy"
 source: "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/run-data-import"
-artifact: "assets/tips/14-twelve-columns-you-did-not-create/table-columns.py"
+artifact: "assets/tips/9-twelve-columns-you-did-not-create/table-columns.py"
 evidence: |
   command: curl -sSL -o coe.zip https://github.com/microsoft/coe-starter-kit/releases/download/CoEStarterKit-February2026/CenterofExcellenceCoreComponents_4.50.9_managed.zip
   observed: |
