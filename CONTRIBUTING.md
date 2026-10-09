@@ -15,7 +15,7 @@ runs nightly.
 | 5 | Terminology | Names checked against the vendor's own page on the day of publishing | Reviewer with the vendor page open |
 | 6 | Cost and supportability | Licence and premium dependency stated; unsupported configuration labelled | `validate_tips.py` (cost required) |
 | 7 | Sanitised | No tenant names, environment URLs, identifiers or customer data | `validate_tips.py` (blocks organisation endpoints - `*.crm*.dynamics.com`, make.powerapps.com, app.powerbi.com, app.fabric.microsoft.com, `*.sharepoint.com` - and email addresses, over the whole file) |
-| 8 | Editorial | One mechanism, tl;dr, gotcha, evidence | Reviewer, against the template |
+| 8 | Editorial | One mechanism, the Title/Summary/Tip shape, the gotcha, and a verification block in `evidence` that stays internal - the page renders the tip, not the proof | Reviewer, against the template |
 | 9 | Reviewed | Two independent reviewers over the text. Catches structure and consistency, never truth | `agent-code-review` loop, both at zero |
 | 10 | Approved and rendered | Published from a preview, checked as rendered, then promoted | Merge to `main` |
 
@@ -44,6 +44,13 @@ evidence: |
 
 The title and the summary are the two things a reader sees before deciding to read the tip, and the
 summary is capped at 200 characters on purpose: a summary that runs longer than that is the tip.
+
+**The body is the tip. The proof is internal.** `evidence` holds the commands and the pasted output
+that convinced you the tip is true, and `_layouts/tip.html` never renders it - it exists so a
+reviewer and the nightly job can check the tip was really run. Nothing in the body should read as
+proof either: no methodology recitals, no "measured across N tables", no long verbatim quotations from
+the source. Those belong in `evidence`. The provenance strip (tested against, environment, cost,
+artifact, primary source) is the reader's trust signal and does stay on the page.
 
 A front-matter value in double quotes cannot contain an escaped double quote - the validator's reader
 ends the value at the first closing quote and rejects what follows. If a value needs to quote

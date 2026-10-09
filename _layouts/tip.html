@@ -41,10 +41,11 @@ under _tips/ and refuses a `_drafts/` folder, so there would be nothing for the 
 
   {{ content }}
 
-  {% if page.evidence %}
-  <h2>Evidence</h2>
-  <pre>{{ page.evidence | strip | escape }}</pre>
-  {% endif %}
+  {%- comment -%}
+  `evidence` is deliberately NOT rendered. The proof - the commands, the pasted output, the counts -
+  is the author's working, kept in front matter so the nightly job and a reviewer can check the tip
+  was really run. A reader is owed the tip and its provenance strip above, not the lab notebook.
+  {%- endcomment -%}
 
   <p><a href="{{ '/all/' | relative_url }}">All tips</a></p>
 </article>

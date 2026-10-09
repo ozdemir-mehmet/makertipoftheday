@@ -102,7 +102,13 @@ if grep -q "&tabs=1" "$PAGE"; then
 else
   echo "ok    no unescaped '&' from the source URL"
 fi
-check "evidence block renders" "<h2>Evidence</h2>"
+check "the tip body renders" "Preview body."
+if grep -q "<h2>Evidence</h2>" "$PAGE"; then
+  echo "FAIL  the evidence block is rendered into the published page - a reader gets the tip, not the proof"
+  fail=1
+else
+  echo "ok    the proof stays out of the published page (no Evidence section)"
+fi
 check "the summary renders as a lead line" "class=\"summary\">A one-line lead"
 check "site header renders" "site-header"
 check "site footer renders" "site-footer"

@@ -32,4 +32,6 @@ artifact: none              # path to the artifact, or none
 evidence: |
   command:
   observed:
+  # internal only. The proof the tip was really run - commands, pasted output, counts. Never rendered
+  # on the site: a reader gets the tip and the provenance strip, the author keeps the lab notebook.
 ---
