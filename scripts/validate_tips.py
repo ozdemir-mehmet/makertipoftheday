@@ -78,9 +78,12 @@ except RuntimeError as exc:
 
 STATES = {"ready", "blocked", "draft"}
 
-# `date` is the day the tip was published. Jekyll reads a collection document's date from front
-# matter, so the feed sorts and dates entries off it - a collection without it feeds jekyll-feed a nil
-# date. It is the one field a queued item does not carry: the publish date is set at promotion.
+# `date` is the date the tip carries. Jekyll reads a collection document's date from front matter, so
+# the feed sorts and dates entries off it - a collection without it feeds jekyll-feed a nil date. It is
+# the one field a queued item does not carry: it is set at promotion, and it may be backfilled, so this
+# checker deliberately does not tie it to `verified_on` - the clock that matters runs from `verified_on`
+# to `expires_on`. What it may never be is in the future: Jekyll withholds a future-dated collection
+# document, so such a tip would be missing from the site with no error rather than refused here.
 TIP_REQUIRED = (
     "title",
     "summary",
@@ -414,17 +417,17 @@ def check_tip(path: Path, errors: list[str]) -> int | None:
     published = data.get("date", "")
     if published and not as_date(published):
         errors.append(
-            f"{where}: date is not an ISO date: '{published}' - it is the publish date, and "
+            f"{where}: date is not an ISO date: '{published}' - it is the date the tip carries, and "
             f"jekyll-feed dates every entry from it"
         )
     else:
         publish_date = as_date(published) if published else None
-        verified = as_date(data.get("verified_on", ""))
         expires = as_date(data.get("expires_on", ""))
-        if publish_date and verified and publish_date < verified:
+        if publish_date and publish_date > dt.date.today():
             errors.append(
-                f"{where}: date ({publish_date}) is before verified_on ({verified}) - a tip is "
-                f"verified before it is published"
+                f"{where}: date ({publish_date}) is in the future - Jekyll withholds a future-dated "
+                f"collection document, so the tip would be missing from the site with no error. A tip "
+                f"may be backfilled, never forward-dated"
             )
         if publish_date and expires and publish_date > expires:
             errors.append(

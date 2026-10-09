@@ -13,8 +13,8 @@
 #                  look like a verified one. Drafts are excluded from the buffer depth.
 #   state: blocked waiting on something outside the tip itself; say what in `next_step`.
 #
-# A queued item carries every field a tip needs except `date` - the publish date is set when the
-# item moves to _tips/, because the verification clock starts at publish.
+# A queued item carries every field a tip needs except `date` - the date it carries is set when the
+# item moves to _tips/, and the verification clock runs from that re-run, not from authoring.
 title: ""
 summary: ""                 # one line, 200 characters max - what the reader gets, not the tip itself
 surface: dataverse          # a slug from _data/surfaces.yml

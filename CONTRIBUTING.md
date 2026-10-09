@@ -27,7 +27,7 @@ title: "Catchy and true - it has to earn the click and still be honest"
 summary: "One line, 200 characters max: what the reader gets, not the tip in a paragraph."
 surface: dataverse          # a slug from _data/surfaces.yml - the one place the vocabulary lives
 tip_number: 42
-date: 2026-10-09            # the publish date; the feed dates entries from it and the listings order by it
+date: 2026-10-09            # the date the tip carries; the feed dates entries from it and the listings order by it
 wave: "2026 wave 1"
 build: "9.2.26094.00"        # optional; the build verified against
 verified_on: 2026-10-09
@@ -102,17 +102,32 @@ excluded from the ready depth, so backfilling ideas never fakes cover for a thin
 1. Write it into `queue/<tip_number>-<slug>.md` first, in the shape above, and mark it `state: ready`
    only when the artifact has actually been run and the evidence block holds the real output.
 2. When it is due to publish, move it to `_tips/` and make two edits: **drop `state:`** (that key is
-   queue-only and the validator rejects unknown keys in a tip) and add `date:` - the publish date -
-   after re-running the artifact. The verification clock starts at publish, so `verified_on` is the
-   day you re-ran it. `date` is the one field a queued item does not carry.
+   queue-only and the validator rejects unknown keys in a tip) and add `date:` - the date the tip
+   carries - after re-running the artifact. `verified_on` is the day you re-ran it. `date` is the one
+   field a queued item does not carry.
 3. Run `python3 scripts/validate_tips.py` and `python3 scripts/reverify.py` locally.
 4. Open a PR. Two independent reviewers must return zero findings on the frozen revision.
 5. Merge to `main`: the workflow validates, builds and deploys.
 
+## Backfilling
+
+`date` may be earlier than the day the tip was re-run. The backlog of a new site is published onto it
+after the fact, and the archive should read as the run of days it describes rather than a cliff at the
+day the site went up: dates from 2026-10-01, the site's first day, forward.
+
+Three things keep that honest:
+
+- **Never forward.** Jekyll withholds a future-dated collection document, so the tip would be missing
+  from the site with no error and no failing build. `validate_tips.py` refuses the date instead.
+- **One tip per date.** The listings sort by `date` alone and Liquid's `sort` has no tie-break, so two
+  tips sharing a date would render in an arbitrary order.
+- **The clock does not move.** The verification clock runs from `verified_on` to `expires_on`, never
+  from `date`, so a backfilled tip reads as older without being any nearer to its expiry.
+
 ## Buffer
 
 Target 10 ready items in `queue/`, alarm at 5. See `queue/README.md` for why a queued item is
-finished work and why the clock starts at publish.
+finished work and why the clock runs from the re-run rather than from authoring.
 
 ## Local build and checks
 

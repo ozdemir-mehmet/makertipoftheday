@@ -11,8 +11,10 @@ generated filler tip is worse than no tip. The queue is what covers those days.
    excluded from the depth count so they can never stand in for cover.
 2. **Depth.** Target 10 ready items; the alarm threshold is 5. `scripts/reverify.py` reports the
    depth and the nightly workflow opens an issue when it drops below the threshold.
-3. **The verification clock starts at publish, not at authoring.** CI re-runs every queued item
-   minutes before it goes out. If it fails, it goes back to the queue and the day stays empty.
+3. **The verification clock runs from the re-run, not from authoring.** CI re-runs every queued item
+   minutes before it goes out. If it fails, it goes back to the queue and the day stays empty. The
+   clock runs from `verified_on` to `expires_on`, so a date the tip carries that is earlier than the
+   re-run - a backfill - shows the tip as older without moving it nearer to its expiry.
 4. **Build the buffer unevenly.** Mechanism tips - pipeline stages, security model behaviour, Direct
    Lake semantics - keep for a year. Feature tips ("what wave 1 added to X") rot in weeks. The
    buffer's backbone is the slow-rotting kind; change-driven tips publish near-immediately.
@@ -35,4 +37,5 @@ generated filler tip is worse than no tip. The queue is what covers those days.
 `<tip_number>-<slug>.md`, matching the tip number it will carry when published, so the queue and the
 published collection stay reconcilable. Publishing is a move and three edits:
 `queue/<n>-<slug>.md` to `_tips/<n>-<slug>.md`, **drop the `state:` key** (it is queue-only, and the
-validator rejects unknown keys in a tip), add `date:` - the publish date - and re-run the artifact.
+validator rejects unknown keys in a tip), add `date:` - the date the tip carries, backfillable to
+2026-10-01 and never forward - and re-run the artifact.

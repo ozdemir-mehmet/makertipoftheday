@@ -194,8 +194,16 @@ expect "the seventh surface is accepted" 0 "all gates pass" "$DOC"
 reset_case; PUBLISHED="last Tuesday"; write_doc
 expect "a non-ISO publish date is rejected" 1 "not an ISO date" "$DOC"
 
+# A backfilled date is the point of the field: a new site's backlog is published onto it after the
+# fact. VERIFIED defaults to 2026-01-01, so this date is two days earlier than the day it was re-run.
 reset_case; PUBLISHED="2025-12-30"; write_doc
-expect "a publish date before the verification is rejected" 1 "before verified_on" "$DOC"
+expect "a backfilled publish date is accepted" 0 "all gates pass" "$DOC"
+
+# Forward-dating is the failure this replaces: Jekyll drops a future-dated collection document, so the
+# tip 404s and the build says nothing. VERIFIED and EXPIRES move next to today's date so the future
+# rule is the only one that can fire here.
+reset_case; VERIFIED="$(date +%F)"; EXPIRES="$(date -d '+90 days' +%F)"; PUBLISHED="$(date -d '+1 day' +%F)"; write_doc
+expect "a publish date in the future is rejected" 1 "in the future" "$DOC"
 
 reset_case; PUBLISHED="2026-09-01"; write_doc
 expect "a publish date after the expiry is rejected" 1 "already expired" "$DOC"
