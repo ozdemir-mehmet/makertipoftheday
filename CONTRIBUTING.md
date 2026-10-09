@@ -9,13 +9,13 @@ runs nightly.
 | # | Gate | What it means | Enforced by |
 |---|------|---------------|-------------|
 | 1 | Provenance | A primary source is cited - a Learn page, a documentation diff, a release note | `validate_tips.py` (source required, must be http(s)) |
-| 2 | Executed | The artifact was run against a pinned environment; the post carries the command and the observed output | `validate_tips.py` (evidence block must contain `observed`) |
+| 2 | Executed | The artifact was run against a pinned environment; the command and its observed output are recorded with the tip | `validate_tips.py` (evidence block must contain `observed`) |
 | 3 | Reproducible | Clean-room deploy with no manual steps, or every manual step enumerated | Reviewer |
-| 4 | Fresh | Expiry no further out than one release wave (183 days cap) | `validate_tips.py`, `reverify.py` |
+| 4 | Fresh | An expiry date, capped at 183 days so that no tip claims to be current indefinitely | `validate_tips.py`, `reverify.py` |
 | 5 | Terminology | Names checked against the vendor's own page on the day of publishing | Reviewer with the vendor page open |
 | 6 | Cost and supportability | Licence and premium dependency stated; unsupported configuration labelled | `validate_tips.py` (cost required) |
 | 7 | Sanitised | No tenant names, environment URLs, identifiers or customer data | `validate_tips.py` (blocks organisation endpoints - `*.crm*.dynamics.com`, make.powerapps.com, app.powerbi.com, app.fabric.microsoft.com, `*.sharepoint.com` - and email addresses, over the whole file) |
-| 8 | Editorial | One mechanism, the Title/Summary/Tip shape, the gotcha, and a verification block in `evidence` that stays internal - the page renders the tip, not the proof | Reviewer, against the template |
+| 8 | Editorial | One mechanism per tip, told plainly: what it is, and what to do about it | Reviewer, against the template |
 | 9 | Reviewed | Two independent reviewers over the text. Catches structure and consistency, never truth | `agent-code-review` loop, both at zero |
 | 10 | Approved and rendered | Published from a preview, checked as rendered, then promoted | Merge to `main` |
 

@@ -6,7 +6,7 @@ tooling (PCF, XrmToolBox, PRT, CMT), Microsoft Fabric, Power BI, and cross-cutti
 and licensing.
 
 Successor in spirit to [crmtipoftheday.com](https://crmtipoftheday.com/) (1462 tips, dormant since
-June 2024), rebuilt for a stack that now ships on a release-wave cadence.
+June 2024), rebuilt for the Dynamics 365 and Power Platform stack as it stands now.
 
 ## What makes a tip here
 
