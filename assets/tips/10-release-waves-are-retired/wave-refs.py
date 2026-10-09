@@ -30,7 +30,7 @@ PATTERNS = (
 )
 
 SKIP_DIRS = {
-    ".git", ".github/workflows/generated", "node_modules", ".venv", "venv", "__pycache__",
+    ".git", ".github", "node_modules", ".venv", "venv", "__pycache__",
     "bin", "obj", "packages", "dist", "build", ".vs", ".idea", "coverage",
 }
 

@@ -28,6 +28,9 @@ evidence: |
       content with a public preview or GA date of 1 June 2026 or later transitions
       Q. Will there be a September 2026 release wave 2 announcement or release wave 2 release plan?
       A. No.
+      the roadmap's own affordances, quoted: "Filter roadmap views to the products that matter
+      most", "Export complete or filtered roadmap views to a CSV file", "Subscribe to updates
+      through RSS", "Search and organize roadmap content using feature IDs and advanced filters"
 
   command: curl -sSL -o iso.html <the Business Central article URL> && pandoc -f html -t plain iso.html
   observed: |
@@ -53,23 +56,39 @@ evidence: |
     no file named a wave
     exit: 0
 
-  command: python3 wave-refs.py /home/mozdemir/src/makertipoftheday
+  command: python3 wave-refs.py <the repository, with this tip's own two files removed>
+  exited: 1
   observed: |
-    9 file(s) still name a wave, 43 reference(s) in total
-    exit: 1
-    files: assets/tips/10-release-waves-are-retired/wave-refs.py, CONTRIBUTING.md,
-    _tips/1-read-a-solution-package-offline.md, _tips/9-twelve-columns-you-did-not-create.md,
-    queue/10-release-waves-are-retired.md, queue/README.md, queue/TEMPLATE.md,
-    scripts/test_gates.sh, scripts/validate_tips.py
-    sample lines it printed:
-      queue/TEMPLATE.md
-        line 28    release wave        expires_on: 2026-07-01   # no further out than one release wave
-      scripts/test_gates.sh
-        line 77    wave 1 or wave 2   wave: "2026 wave 1"
-      scripts/validate_tips.py
-        line 140   release wave        MAX_WINDOW_DAYS = 183  # one release wave
-    (taken on 2026-10-09 with the repository as it stood; the total moves as files change, because this
-    tip's own body and evidence carry the vocabulary too - which is why the body quotes no figure)
+    === /home/mozdemir/.hermes/cache/scratch/scan-target ===
+      /home/mozdemir/.hermes/cache/scratch/scan-target/CONTRIBUTING.md
+        line 31    wave 1 or wave 2                              wave: "2026 wave 1"
+      /home/mozdemir/.hermes/cache/scratch/scan-target/_tips/1-read-a-solution-package-offline.md
+        line 7     release wave                                  wave: "n/a - file format only; release waves were retired in September 2026"
+      /home/mozdemir/.hermes/cache/scratch/scan-target/_tips/9-twelve-columns-you-did-not-create.md
+        line 7     release wave                                  wave: "n/a - solution package format; release waves were retired in September 2026"
+      /home/mozdemir/.hermes/cache/scratch/scan-target/queue/README.md
+        line 3     release wave                                  A day with nothing worth publishing is normal: the change feed is thin between release waves, an
+        line 19    wave 1 or wave 2                              Lake semantics - keep for a year. Feature tips ("what wave 1 added to X") rot in weeks. The
+        line 21    wave 1 or wave 2                              5. **Expect the season.** Power Platform ships two waves a year - wave 1 GA in April, wave 2 GA 
+        line 24    a release plan                                6. **The change feed is not the release plans.** Release plans stopped publishing in September 2
+      /home/mozdemir/.hermes/cache/scratch/scan-target/queue/TEMPLATE.md
+        line 28    release wave                                  expires_on: 2026-07-01      # no further out than one release wave
+      /home/mozdemir/.hermes/cache/scratch/scan-target/scripts/test_gates.sh
+        line 77    wave 1 or wave 2                              wave: "2026 wave 1"
+        line 102   wave 1 or wave 2                              wave: "2026 wave 1"
+        line 153   release wave                                  expect "expiry beyond one release wave is rejected" 1 "over the" "$DOC"
+        line 286   wave 1 or wave 2                              wave: "2026 wave 1"
+        line 303   wave 1 or wave 2                              wave: "2026 wave 1"
+      /home/mozdemir/.hermes/cache/scratch/scan-target/scripts/validate_tips.py
+        line 140   release wave                                  MAX_WINDOW_DAYS = 183  # one release wave
+        line 372   release wave                                  f"{MAX_WINDOW_DAYS}-day cap (one release wave)"
+    
+    7 file(s) still name a wave, 15 reference(s) in total
+    none of it will ever be refreshed again - the roadmap is continuous now
+    (the whole output, pasted as printed on 2026-10-09. The tip's own two files are removed from
+    the copy it scans, because this tip's text is itself full of the vocabulary - without that,
+    the scan reads back its own transcript and the figure changes every time the tip is edited,
+    which is why the body quotes no total)
 
 ---
 
@@ -98,10 +117,10 @@ feature IDs, and it is continuous - so put a review rhythm in the calendar yours
 quietly disappears.
 
 Message Center is unchanged, and for your tenant it is still the one that matters: the roadmap tells you
-what is coming, Message Center tells you what has already been switched on in your environment.
+what is coming, Message Center carries the tenant-relevant change notices for your environment.
 
-## What to move before November
+## A board column will outlive the thing it is named after
 
 Release Planner is going. Export anything you still need from it, then replace release-plan links in your
 docs, pipeline comments and onboarding notes with links to the roadmap. Bookmarked release plans and pinned
-"wave 1" boards are the two places I would look first.
+a "wave 1" board column is where I would start looking.
