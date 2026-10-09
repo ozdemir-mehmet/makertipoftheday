@@ -26,11 +26,12 @@
 
 * { box-sizing: border-box; }
 
+/* One step down: every size in this file is 0.9 of what it was. Add a step, not a new size. */
 body {
   margin: 0 auto;
   padding: 1.5rem 1.25rem 4rem;
   max-width: 46rem;
-  font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font: 15.3px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   color: var(--fg);
   background: var(--bg);
 }
@@ -43,17 +44,18 @@ a { color: var(--accent); }
   margin-bottom: 1.75rem;
 }
 
-.site-title { font-weight: 700; font-size: 1.15rem; text-decoration: none; color: var(--fg); }
-.site-tagline { display: block; color: var(--muted); font-size: .9rem; margin: .2rem 0 .6rem; }
-.site-header nav a { margin-right: .9rem; font-size: .92rem; }
+.site-title { font-weight: 700; font-size: 1.04rem; text-decoration: none; color: var(--fg); }
+.site-tagline { display: block; color: var(--muted); font-size: .81rem; margin: .2rem 0 .6rem; }
+.site-header nav a { margin-right: .9rem; font-size: .83rem; }
 
-h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 .4rem; }
-h2 { font-size: 1.2rem; margin-top: 2rem; }
+h1 { font-size: 1.44rem; line-height: 1.25; margin: 0 0 .4rem; }
+h2 { font-size: 1.08rem; margin-top: 2rem; }
 
 .tip-list { list-style: none; padding: 0; }
 .tip-list li { padding: .85rem 0; border-bottom: 1px solid var(--line); }
-.tip-list .meta { display: block; color: var(--muted); font-size: .85rem; }
+.tip-list .meta { display: block; color: var(--muted); font-size: .77rem; }
 
+/* held at .72rem: uppercase meta below ~11px stops being readable */
 .surface {
   display: inline-block;
   font-size: .72rem;
@@ -73,15 +75,18 @@ pre {
   border-radius: 6px;
   padding: .8rem 1rem;
   overflow-x: auto;
-  font-size: .85rem;
+  font-size: .77rem;
   line-height: 1.5;
 }
 
 code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .9em; }
 
-.tip .summary { font-size: 1.05rem; color: var(--muted); margin: -.2rem 0 1rem; }
+/* a code block sets its own size: without this, `.9em` scales against `pre` and compounds the step */
+pre code { font-size: 1em; }
 
-.site-footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
+.tip .summary { font-size: .95rem; color: var(--muted); margin: -.2rem 0 1rem; }
+
+.site-footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .77rem; }
 
 @media print {
   :root { --fg: #000; --muted: #333; --bg: #fff; --panel: #fff; --line: #999; }
