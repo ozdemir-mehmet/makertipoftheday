@@ -23,7 +23,8 @@ runs nightly.
 
 ```yaml
 ---
-title: "Short, specific, no clickbait"
+title: "Catchy and true - it has to earn the click and still be honest"
+summary: "One line, 200 characters max: what the reader gets, not the tip in a paragraph."
 surface: dataverse          # a slug from _data/surfaces.yml - the one place the vocabulary lives
 tip_number: 42
 date: 2026-10-09            # the publish date; the feed dates entries from it and the listings order by it
@@ -40,6 +41,13 @@ evidence: |
   observed: ...
 ---
 ```
+
+The title and the summary are the two things a reader sees before deciding to read the tip, and the
+summary is capped at 200 characters on purpose: a summary that runs longer than that is the tip.
+
+A front-matter value in double quotes cannot contain an escaped double quote - the validator's reader
+ends the value at the first closing quote and rejects what follows. If a value needs to quote
+something, rephrase it or drop the quotes; the error names the offending line and key.
 
 File naming: `_tips/<tip_number>-<slug>.md` - the `_tips` folder is a Jekyll collection, so documents
 render at `/tip/<file name without extension>/`. Artifacts live separately under
@@ -67,6 +75,19 @@ under the link's name while the validator checked the target's, and a checkout o
 symlink support would have no file there at all. Commit the file itself.
 
 ## Adding a tip
+
+Queue items come in three states, and `state` decides which schema applies:
+
+| State | Needs | Counts toward the buffer |
+|---|---|---|
+| `ready` | Every field in the shape above, including a real `evidence` block | Yes - it is finished work |
+| `draft` | Title, summary, surface, tip_number, source, `next_step` | No |
+| `blocked` | The same as ready, plus `next_step` saying what it waits on | No |
+
+A `draft` exists so a tip sourced from a primary document can be recorded before anyone has run its
+mechanism. It deliberately cannot carry `verified_on` or `evidence`, because a sourced tip that can
+look verified will eventually be published as verified. Drafts are visible in the nightly report and
+excluded from the ready depth, so backfilling ideas never fakes cover for a thin week.
 
 1. Write it into `queue/<tip_number>-<slug>.md` first, in the shape above, and mark it `state: ready`
    only when the artifact has actually been run and the evidence block holds the real output.

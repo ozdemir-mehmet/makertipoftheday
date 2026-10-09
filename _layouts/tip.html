@@ -11,6 +11,8 @@ under _tips/ and refuses a `_drafts/` folder, so there would be nothing for the 
 <article class="tip">
   <h1>{{ page.title | escape }}</h1>
 
+  {% if page.summary %}<p class="summary">{{ page.summary | escape }}</p>{% endif %}
+
   <p class="meta">
     <span class="surface">{% include surface-label.html surface=page.surface %}</span>
     {% if page.tip_number %}<span> Tip #{{ page.tip_number }}</span>{% endif %}

@@ -76,13 +76,14 @@ except RuntimeError as exc:
     print(f"error: the surface vocabulary is unusable - {exc}", file=sys.stderr)
     sys.exit(2)
 
-STATES = {"ready", "blocked"}
+STATES = {"ready", "blocked", "draft"}
 
 # `date` is the day the tip was published. Jekyll reads a collection document's date from front
 # matter, so the feed sorts and dates entries off it - a collection without it feeds jekyll-feed a nil
 # date. It is the one field a queued item does not carry: the publish date is set at promotion.
 TIP_REQUIRED = (
     "title",
+    "summary",
     "surface",
     "tip_number",
     "date",
@@ -96,6 +97,7 @@ TIP_REQUIRED = (
 )
 QUEUE_REQUIRED = (
     "title",
+    "summary",
     "surface",
     "tip_number",
     "state",
@@ -108,6 +110,21 @@ QUEUE_REQUIRED = (
     "evidence",
 )
 
+# A draft is a sourced tip whose mechanism has not been executed yet: `state: draft` plus a primary
+# source and the next step that would finish it. It deliberately does NOT require verified_on,
+# verified_env, wave, cost, artifact or evidence, because writing those before the artifact has run is
+# how a site ends up publishing claims nobody checked. Drafts are also excluded from the ready-queue
+# depth, so they cannot inflate the buffer metric that reverify.py reports.
+DRAFT_REQUIRED = (
+    "title",
+    "summary",
+    "surface",
+    "tip_number",
+    "state",
+    "source",
+    "next_step",
+)
+
 # `build` and `verified_env` are the only optional keys. `published` and `example` are rejected
 # outright rather than validated: Jekyll's YAML reader accepts several spellings of false (false,
 # False, FALSE, no, off) and any of them drops the document out of the collection, and an `example`
@@ -115,9 +132,10 @@ QUEUE_REQUIRED = (
 OPTIONAL_KEYS = {"build", "verified_env"}
 FORBIDDEN_KEYS = {"published", "example"}
 ALLOWED_TIP_KEYS = set(TIP_REQUIRED) | OPTIONAL_KEYS
-ALLOWED_QUEUE_KEYS = set(QUEUE_REQUIRED) | OPTIONAL_KEYS
+ALLOWED_QUEUE_KEYS = set(QUEUE_REQUIRED) | OPTIONAL_KEYS | {"next_step"}
 
 MAX_WINDOW_DAYS = 183  # one release wave
+MAX_SUMMARY_CHARS = 200  # the lead line has to stay one readable line
 SKIP_NAMES = {"README.md", "TEMPLATE.md"}
 
 # A symlinked document is not a document here. git stores the link and not the content, Jekyll would
@@ -308,6 +326,18 @@ def check_common(
         )
     if data.get("source") and not data["source"].startswith(("http://", "https://")):
         errors.append(f"{where}: source must be an http(s) URL, got '{data['source'][:50]}'")
+
+    # The summary is the one line a reader sees before deciding to read the tip: it has to fit on a
+    # line and it has to be a summary, not the tip with the newlines taken out.
+    summary = data.get("summary", "")
+    if summary:
+        if "\n" in summary:
+            errors.append(f"{where}: summary must be a single line, not a block")
+        elif len(summary) > MAX_SUMMARY_CHARS:
+            errors.append(
+                f"{where}: summary is {len(summary)} characters, over the "
+                f"{MAX_SUMMARY_CHARS}-character cap - that is the tip, not a summary"
+            )
     evidence = data.get("evidence", "")
     if evidence and "observed" not in evidence.lower():
         errors.append(
@@ -424,7 +454,10 @@ def check_queue_item(path: Path, errors: list[str]) -> int | None:
 
     check_schema(data, ALLOWED_QUEUE_KEYS, where, errors, kind="queue")
 
-    for field in QUEUE_REQUIRED:
+    # A draft opts into the lighter schema; everything else has to carry the evidence a finished tip
+    # carries, so the difference between "sourced" and "verified" is structural rather than a promise.
+    required = DRAFT_REQUIRED if data.get("state") == "draft" else QUEUE_REQUIRED
+    for field in required:
         if field not in data:
             errors.append(f"{where}: missing required field '{field}'")
         elif not data[field].strip():

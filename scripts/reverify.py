@@ -83,6 +83,7 @@ def main() -> int:
             healthy.append(row)
 
     ready = [q for q in queued if q[1].get("state") == "ready"]
+    drafts = [q for q in queued if q[1].get("state") == "draft"]
     blocked = [q for q in queued if q[1].get("state") == "blocked"]
 
     lines = ["# Tip re-verification report", "", f"Generated {today.isoformat()} (UTC date of the runner).", ""]
@@ -117,7 +118,8 @@ def main() -> int:
 
     lines += ["## Buffer", ""]
     lines += [
-        f"{len(ready)} ready, {len(blocked)} blocked. Target {QUEUE_TARGET}, alarm below {QUEUE_MINIMUM}.",
+        f"{len(ready)} ready, {len(blocked)} blocked, {len(drafts)} draft. "
+        f"Target {QUEUE_TARGET}, alarm below {QUEUE_MINIMUM}.",
         "",
     ]
     if len(ready) < QUEUE_MINIMUM:
@@ -140,7 +142,7 @@ def main() -> int:
     needs_attention = bool(expired) or len(ready) < QUEUE_MINIMUM or bool(errors)
     print(
         f"{len(tips)} published ({len(expired)} expired, {len(due_soon)} due soon); "
-        f"queue {len(ready)} ready / {len(blocked)} blocked "
+        f"queue {len(ready)} ready / {len(blocked)} blocked / {len(drafts)} draft "
         f"(target {QUEUE_TARGET}, alarm {QUEUE_MINIMUM}); "
         f"{len(errors)} structural problem(s); "
         f"report: {ROOT / 'reverify-report.md'}"

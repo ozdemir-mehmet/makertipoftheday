@@ -5,8 +5,10 @@ generated filler tip is worse than no tip. The queue is what covers those days.
 
 ## Rules
 
-1. **A queued item is finished work, not a draft.** Artifact built, executed, evidence captured,
-   nothing left to write. If it still needs work, it is not in the queue.
+1. **A `ready` item is finished work.** Artifact built, executed, evidence captured, nothing left to
+   write. A `draft` is the exception the state exists for: a tip sourced from a primary document whose
+   mechanism nobody has run yet. Drafts are recorded here so the sourcing is not lost, and they are
+   excluded from the depth count so they can never stand in for cover.
 2. **Depth.** Target 10 ready items; the alarm threshold is 5. `scripts/reverify.py` reports the
    depth and the nightly workflow opens an issue when it drops below the threshold.
 3. **The verification clock starts at publish, not at authoring.** CI re-runs every queued item
@@ -24,6 +26,8 @@ generated filler tip is worse than no tip. The queue is what covers those days.
 ## Item states
 
 - `ready` - verified, publishable today.
+- `draft` - sourced from a primary document, mechanism not yet executed. Needs `next_step`, cannot
+  carry `verified_on` or `evidence`, and does not count toward the depth.
 - `blocked` - verified but waiting on something external (an environment, a licence, a wave).
 
 ## Naming

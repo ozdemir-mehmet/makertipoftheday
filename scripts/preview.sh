@@ -39,6 +39,7 @@ write_doc() { # write_doc <expires_on>
   cat > "$DOC" <<TIP
 ---
 title: "Preview check"
+summary: "A one-line lead that must render above the fold"
 surface: power-platform
 tip_number: 99
 date: $TODAY
@@ -102,6 +103,7 @@ else
   echo "ok    no unescaped '&' from the source URL"
 fi
 check "evidence block renders" "<h2>Evidence</h2>"
+check "the summary renders as a lead line" "class=\"summary\">A one-line lead"
 check "site header renders" "site-header"
 check "site footer renders" "site-footer"
 check "the surface chip shows the display label" "Power Platform"

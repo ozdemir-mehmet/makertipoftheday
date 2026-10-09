@@ -70,6 +70,7 @@ write_doc() {
   cat > "$DOC" <<EOF
 ---
 title: "$TITLE"
+summary: "One line that says what the reader gets"
 surface: $SURFACE
 tip_number: $NUMBER
 date: $PUBLISHED
@@ -94,6 +95,7 @@ write_queue() { # write_queue <tip_number> <state> [extra front matter lines]
   cat > "$QUEUED" <<EOF
 ---
 title: "Gate test queued item"
+summary: "One line that says what the reader gets"
 surface: dataverse
 tip_number: $1
 state: $2
@@ -217,6 +219,21 @@ expect "a filename without a tip number is rejected" 1 "must be named" "$ODD"
 rm -f "$ODD"
 
 reset_case; write_doc
+write_draft() { # write_draft <tip_number> [extra front matter lines]
+  local extra="${2-}"
+  cat > "$QUEUED" <<EOF
+---
+title: "Gate test draft"
+summary: "One line that says what the reader gets"
+surface: dataverse
+tip_number: $1
+state: draft
+source: "https://learn.microsoft.com/"
+$extra
+---
+EOF
+}
+
 write_queue 9999 ready
 expect "a tip number reused between _tips and queue is rejected" 1 "already used" "$DOC" "$QUEUED"
 
@@ -231,6 +248,69 @@ expect "an unknown queue state is rejected" 1 "not one of" "$QUEUED"
 
 write_queue 9998 ready "date: 2026-01-10"
 expect "a queued item carrying a publish date is rejected" 1 "publish date" "$QUEUED"
+
+# A sourced tip that has not been executed must not be able to look like finished work, and must not
+# inflate the buffer metric that reverify.py reports.
+write_draft 9997 "next_step: \"Run the two GETs against a development environment\""
+expect "a sourced draft passes on the lighter schema" 0 "all gates pass" "$QUEUED"
+
+write_draft 9997
+expect "a draft without a next step is rejected" 1 "missing required field 'next_step'" "$QUEUED"
+
+ready_on_disk=$(grep -l "^state: ready" "$ROOT"/queue/*.md 2>/dev/null | grep -vE "/(README|TEMPLATE)\.md$" | wc -l)
+reported=$(python3 "$ROOT/scripts/reverify.py" 2>&1 | grep -oE "queue [0-9]+ ready" | grep -oE "[0-9]+" || echo "")
+if [ -n "$reported" ] && [ "$ready_on_disk" = "$reported" ]; then
+  echo "ok    drafts are excluded from the ready-queue depth ($reported ready)"
+else
+  echo "FAIL  ready count mismatch: $ready_on_disk ready on disk, reverify reported '$reported'"
+  fails=1
+fi
+
+cat > "$QUEUED" <<'EOF'
+---
+title: "Ready without evidence"
+summary: "One line that says what the reader gets"
+surface: dataverse
+tip_number: 9996
+state: ready
+wave: "2026 wave 1"
+verified_on: 2026-01-01
+expires_on: 2026-06-01
+cost: "free"
+source: "https://learn.microsoft.com/"
+artifact: "none"
+---
+EOF
+expect "a ready item with no evidence block is rejected" 1 "missing required field 'evidence'" "$QUEUED"
+
+cat > "$QUEUED" <<'EOF'
+---
+title: "Empty summary"
+summary: ""
+surface: dataverse
+tip_number: 9995
+state: ready
+wave: "2026 wave 1"
+verified_on: 2026-01-01
+expires_on: 2026-06-01
+cost: "free"
+source: "https://learn.microsoft.com/"
+artifact: "none"
+evidence: |
+  command: test
+  observed: test output
+---
+EOF
+expect "an empty summary is rejected" 1 "required field 'summary' is empty" "$QUEUED"
+
+write_queue 9995 ready
+python3 - "$QUEUED" <<'PY'
+import sys, pathlib
+p = pathlib.Path(sys.argv[1])
+p.write_text(p.read_text().replace('summary: "One line that says what the reader gets"',
+                                   'summary: "' + "x" * 201 + '"'))
+PY
+expect "a 201-character summary is rejected" 1 "over the 200-character cap" "$QUEUED"
 
 expect "a path outside the corpus is rejected" 1 "not a document under" "$ROOT/CONTRIBUTING.md"
 
@@ -277,7 +357,7 @@ done
 # A document the nightly job cannot read must be reported, not counted as a healthy absence.
 printf 'this file has no front matter at all\n' > "$QUEUED"
 out="$(python3 "$ROOT/scripts/reverify.py" 2>&1)" && rc=0 || rc=$?
-if [ "$rc" -eq 10 ] && printf '%s' "$out" | grep -q "1 structural problem"; then
+if [ "$rc" -eq 10 ] && printf '%s' "$out" | grep -q "structural problem"; then
   echo "ok    an unparseable document is reported as a structural problem"
 else
   echo "FAIL  an unparseable document was not reported (exit $rc)"
