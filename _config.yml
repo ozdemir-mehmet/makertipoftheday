@@ -35,6 +35,7 @@ feed:
 
 # Repo-side material that must not be published to the site.
 exclude:
+  - assets/tips
   - .github
   - Gemfile
   - Gemfile.lock

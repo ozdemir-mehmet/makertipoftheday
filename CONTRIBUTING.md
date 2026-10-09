@@ -52,17 +52,19 @@ section, no badge, no re-verify date, no tested-against/environment/cost/artifac
 the listings publish no badge either. `scripts/preview.sh` asserts every one of those is ABSENT, in a
 fresh state and in a lapsed one, so the rule has a guard rather than a convention. Nothing in the body
 should read as proof either: no methodology recitals, no "measured across N tables", no long verbatim
-quotations from the source. Those belong in `evidence`. The artifact is internal too - it is how the claim was measured and how the tip gets re-verified - so a tip does not link it from the body. Whether the
-scripts are published at all is a separate decision that has not been taken.
+quotations from the source. Those belong in `evidence`. The artifact is internal too - it is how the claim
+was measured and how the tip gets re-verified - so a tip does not link it from the body, and the directory
+it lives in is not published at all: `_config.yml` excludes `assets/tips` from the build.
 
 A front-matter value in double quotes cannot contain an escaped double quote - the validator's reader
 ends the value at the first closing quote and rejects what follows. If a value needs to quote
 something, rephrase it or drop the quotes; the error names the offending line and key.
 
 File naming: `_tips/<tip_number>-<slug>.md` - the `_tips` folder is a Jekyll collection, so documents
-render at `/tip/<file name without extension>/`. Artifacts live separately under
-`assets/tips/<tip_number>-<slug>/` because `_tips/` is never copied into the built site, and an
-artifact has to be downloadable. Tip numbers are unique and never reused.
+render at `/tip/<file name without extension>/`. Artifacts live separately, under
+`assets/tips/<tip_number>-<slug>/`, because `_tips/` holds tip documents and nothing else - the validator
+parses every file in it. That directory is excluded from the built site, so an artifact is tooling you run
+from a checkout, never a download. Tip numbers are unique and never reused.
 
 ## What the validator refuses
 
