@@ -3,11 +3,10 @@ title: "Release waves are over, and your repository still speaks wave"
 summary: "The twice-yearly release wave is gone in favour of one always-on roadmap, so every reference you named after a wave has stopped being maintained."
 surface: cross-cutting
 tip_number: 10
-state: ready
-next_step: ""
 wave: "n/a - retired in September 2026; disclosure is continuous on the AI at Work roadmap"
 build: "Microsoft's 25 August 2026 announcement; the AI at Work roadmap and Release Planner as served on 2026-10-09"
-verified_on: 2026-10-09
+date: 2026-10-10
+verified_on: 2026-10-10
 verified_env: "Linux, Python 3.14.7 - network fetch of the two public sources and three live roadmap URLs; no environment, no login"
 expires_on: 2026-12-31
 cost: "Free - the roadmap and Message Center are included; Message Center needs an admin role"
@@ -85,10 +84,10 @@ evidence: |
     
     7 file(s) still name a wave, 15 reference(s) in total
     none of it will ever be refreshed again - the roadmap is continuous now
-    (the whole output, pasted as printed on 2026-10-09. The tip's own two files are removed from
-    the copy it scans, because this tip's text is itself full of the vocabulary - without that,
-    the scan reads back its own transcript and the figure changes every time the tip is edited,
-    which is why the body quotes no total)
+    (the whole output, pasted as printed on 2026-10-10, the day this tip went up. The tip's own
+    two files are removed from the copy it scans, because this tip's text is itself full of the
+    vocabulary - without that, the scan reads back its own transcript and the figure changes
+    every time the tip is edited, which is why the body quotes no total)
 
 ---
 
