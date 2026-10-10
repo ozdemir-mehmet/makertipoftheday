@@ -98,28 +98,21 @@ and a date. Release Planner retires by 15 November 2026, and there is no 2027 wa
 
 ## Anything you named after a wave has stopped being maintained
 
-Waves were not only a publishing cadence. They became words - a board column, a pipeline parameter, a wiki
-page, a folder of release notes. Those names keep working and will never be updated again, which is harder
-to notice than a broken link.
+Wave-era names stop being true without breaking anything. A board column still works, a pipeline parameter
+still runs, a wiki page still loads, and every one of them says something that is no longer the case. Search
+your repositories and documentation for `release wave`, `wave 1`, `RW1` and `release plan`.
 
-I scanned this repository for that vocabulary and it is in the repository's own docs, its queue templates
-and its validator: `MAX_WINDOW_DAYS = 183  # one release wave`, `wave: "2026 wave 1"` in test fixtures, a
-note promising an expiry "no further out than one release wave". Every one of them was accurate when it was
-written, and not one of them can be checked against anything now. A solution template I had locally came
-back clean, so this is not universal - it is the kind of thing you have to go looking for.
+## Set your own planning dates
 
-## The twice-a-year planning moment is yours to choose
+A wave gave every organisation the same two dates a year to gather stakeholders and set a delivery window.
+The roadmap is continuous, and it has filters, CSV export, RSS and stable feature IDs if you want to build a
+view around it, so put the habit in the calendar yourself.
 
-A wave gave every organisation the same two dates a year to gather stakeholders and plan a window. Nothing
-replaces that automatically. The roadmap gives you filters, CSV export and RSS, and stable
-feature IDs, and it is continuous - so put a review rhythm in the calendar yourself, or the planning window
-quietly disappears.
-
-Message Center is unchanged, and for your tenant it is still the one that matters: the roadmap tells you
-what is coming, Message Center carries the tenant-relevant change notices for your environment.
+Message Center has not changed, and it is still the record for your own tenant: the roadmap says what is
+coming, Message Center says what has reached yours.
 
 ## A board column will outlive the thing it is named after
 
 Release Planner is going. Export anything you still need from it, then replace release-plan links in your
-docs, pipeline comments and onboarding notes with links to the roadmap. The bookmarked release plans and
-the pinned "wave 1" boards are where I would start looking.
+docs, pipeline comments and onboarding notes with links to the roadmap. Start with the bookmarked release
+plans and the pinned "wave 1" boards.
