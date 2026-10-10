@@ -37,5 +37,5 @@ Every tip has to clear these gates, in order:
 
 Dataverse; Power Platform (Power Apps, Power Automate, Power Pages, Copilot Studio); Dynamics 365 CRM;
 extensibility and tooling (client scripting and Xrm, PCF, FetchXML Builder, Ribbon Workbench,
-XrmToolBox, PRT, CMT); Microsoft Fabric; Power BI - plus cross-cutting ALM, governance, licensing and
+XrmToolBox, PRT, CMT); Microsoft Fabric; Power BI - plus solution packaging, ALM, governance, licensing and
 cost across all of them.

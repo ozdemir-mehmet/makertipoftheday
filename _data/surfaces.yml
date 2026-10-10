@@ -16,5 +16,7 @@
   label: Microsoft Fabric
 - slug: power-bi
   label: Power BI
-- slug: cross-cutting
-  label: Cross-cutting
+- slug: alm-governance
+  label: ALM and governance
+- slug: solution-packaging
+  label: Solution packaging

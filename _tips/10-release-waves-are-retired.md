@@ -1,7 +1,7 @@
 ---
 title: "Release waves are over, and your repository still speaks wave"
 summary: "The twice-yearly release wave is gone in favour of one always-on roadmap, so every reference you named after a wave has stopped being maintained."
-surface: cross-cutting
+surface: alm-governance
 tip_number: 10
 wave: "n/a - retired in September 2026; disclosure is continuous on the AI at Work roadmap"
 build: "Microsoft's 25 August 2026 announcement; the AI at Work roadmap and Release Planner as served on 2026-10-09"

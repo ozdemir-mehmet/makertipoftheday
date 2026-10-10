@@ -103,7 +103,8 @@ main p, main ul li, main ol li { font-size: .92rem; line-height: 1.72; }
 .surface[data-s="extensibility"]  { background: #eceef2; color: #3f4855; }
 .surface[data-s="fabric"]         { background: #e2eefb; color: #0d4a7a; }
 .surface[data-s="power-bi"]       { background: #fbf3d6; color: #7a5a06; }
-.surface[data-s="cross-cutting"]  { background: #fbe6ea; color: #8c1230; }
+.surface[data-s="solution-packaging"] { background: #fbe6ea; color: #8c1230; }
+.surface[data-s="alm-governance"]    { background: #e6f4e6; color: #1f5c2e; }
 
 @media (prefers-color-scheme: dark) {
   .surface[data-s="dataverse"]      { background: #2a2350; color: #c3b6ff; }
@@ -112,7 +113,8 @@ main p, main ul li, main ol li { font-size: .92rem; line-height: 1.72; }
   .surface[data-s="extensibility"]  { background: #2b3038; color: #c3cbd6; }
   .surface[data-s="fabric"]         { background: #12314d; color: #9ecbff; }
   .surface[data-s="power-bi"]       { background: #3d330d; color: #e6d17a; }
-  .surface[data-s="cross-cutting"]  { background: #46141f; color: #ffa8b8; }
+  .surface[data-s="solution-packaging"] { background: #46141f; color: #ffa8b8; }
+  .surface[data-s="alm-governance"]    { background: #173a1f; color: #9fdcae; }
 }
 
 /* ---- a labelled stretch of the feed ---- */

@@ -1,7 +1,7 @@
 ---
 title: "Pin pac in a tool manifest, and stop trusting the pac on your PATH"
 summary: "Installing the Power Platform CLI into a .NET tool manifest pins the version, so the pac your pipeline runs is the pac you tested."
-surface: cross-cutting
+surface: extensibility
 tip_number: 2
 date: 2026-10-02
 wave: "n/a - CLI only, no environment was touched"

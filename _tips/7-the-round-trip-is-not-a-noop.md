@@ -1,7 +1,7 @@
 ---
 title: "The round trip is not a no-op"
 summary: "Unpack a package and pack it back and you do not get the file you started with: the XML gains a declaration, the line endings change, and the empty containers come back collapsed."
-surface: cross-cutting
+surface: solution-packaging
 tip_number: 7
 date: 2026-10-07
 wave: "n/a - file format and CLI only; no environment was touched"

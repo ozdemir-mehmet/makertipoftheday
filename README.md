@@ -2,7 +2,7 @@
 
 Daily, verified tips for the Microsoft business-application stack: Dataverse, Power Platform
 (Power Apps, Power Automate, Power Pages, Copilot Studio), Dynamics 365 CRM, extensibility and
-tooling (PCF, XrmToolBox, PRT, CMT), Microsoft Fabric, Power BI, and cross-cutting ALM, governance
+tooling (PCF, XrmToolBox, PRT, CMT), Microsoft Fabric, Power BI, and solution packaging, ALM, governance
 and licensing.
 
 Successor in spirit to [crmtipoftheday.com](https://crmtipoftheday.com/) (1462 tips, dormant since
@@ -33,10 +33,11 @@ Rules every tip in this repository must satisfy:
 | Dataverse | data model, security roles and column-level security, sync/async plug-ins, virtual tables, Git integration, solutions, Dataverse MCP server |
 | Power Platform | Power Apps (canvas, model-driven, custom pages), Power Automate (cloud and desktop flows, process mining and process intelligence), Power Pages, Copilot Studio agents |
 | Dynamics 365 CRM | Sales, Customer Service, Field Service, Contact Center, Customer Insights |
-| Extensibility and tooling | client scripting and Xrm, PCF, FetchXML Builder, Ribbon Workbench, XrmToolBox, PRT, CMT |
+| Extensibility and tooling | client scripting and Xrm, PCF, FetchXML Builder, Ribbon Workbench, XrmToolBox, PRT, CMT, pac CLI |
 | Microsoft Fabric | OneLake, Lakehouse/Warehouse, Data Factory, Real-Time Intelligence, Direct Lake, OneLake shortcuts to Dataverse |
 | Power BI | semantic models, reports, Copilot |
-| Cross-cutting | ALM (solutions, pipelines, managed environments, pac CLI), governance (DLP, CoE Toolkit, Purview), licensing and capacity |
+| ALM and governance | deployment pipelines and managed environments, release and roadmap changes, governance (DLP, CoE Toolkit, Purview), licensing and capacity |
+| Solution packaging | packaging mechanics (`pac solution pack` and `unpack`, solution types, web resource sidecars, `[Content_Types].xml`, round-trip behaviour) |
 
 Out of scope: Business Central (AL) and Finance & Operations (X++) - this is the CRM-side Dynamics
 stack, not ERP.

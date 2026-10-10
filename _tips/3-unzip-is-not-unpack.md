@@ -1,7 +1,7 @@
 ---
 title: "You cannot unzip a solution and pack it back"
 summary: "A solution zip and an unpacked solution are different shapes on disk. The packer refuses the zip's shape, naming a file that is sitting right there."
-surface: cross-cutting
+surface: solution-packaging
 tip_number: 3
 date: 2026-10-03
 wave: "n/a - file format and CLI only; no environment was touched"

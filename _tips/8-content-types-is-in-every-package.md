@@ -1,7 +1,7 @@
 ---
 title: "The file that is in every package and in no unpacked folder"
 summary: "Every solution package carries a [Content_Types].xml that no unpacked folder ever has, and it names the exact parts the import will read."
-surface: cross-cutting
+surface: solution-packaging
 tip_number: 8
 date: 2026-10-08
 wave: "n/a - file format and CLI only; no environment was touched"

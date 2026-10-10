@@ -1,7 +1,7 @@
 ---
 title: "Two packs of one folder are never the same bytes"
 summary: "Pack the same unpacked folder twice and you get two files of the same size and different bytes. Hash the artifact in a pipeline and every run looks like a change."
-surface: cross-cutting
+surface: solution-packaging
 tip_number: 5
 date: 2026-10-05
 wave: "n/a - file format and CLI only; no environment was touched"
