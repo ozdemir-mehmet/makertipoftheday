@@ -53,13 +53,13 @@ It is the package's list of parts, written in the container's vocabulary rather 
 
 Three hundred and twenty-two bytes, naming the one part that is not an XML file, with a default that
 covers the ones that are. Pack the folder that package unpacked to, and this member comes back byte for
-byte - the same default, the same override, the same GUID, because it is one package compared with itself.
+byte as the one in Microsoft's own published package.
 
 `pac solution unpack` never writes it, so it cannot live in
 your repository and you cannot break it by editing the folder. `pac solution pack` always writes it, so
 it turns up in every artifact you build. It is the only member of the package that describes the
 package.
 
-If you compare two packages part by part to find what changed, this is the part that will never tell you
-anything. It is also the part nobody remembers when a package is assembled by hand - and the one that
-says what the other parts are.
+If you compare two packages part by part to find what changed, this member will never be the one that
+did. It is also the one nobody remembers when a package is assembled by hand, which is how it ends up
+wrong.

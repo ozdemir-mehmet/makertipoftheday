@@ -68,15 +68,15 @@ No folder is written. Not a partial one, not a warning-then-continue - the comma
 compares it to what you asked for, and stops. The same thing happens at the other end: unpack a managed
 solution, then pack it back asking for `Unmanaged`, and you get the identical refusal.
 
-Where does the answer live? In the folder you unpacked, in `Other/Solution.xml`:
+The answer is in the folder you unpacked, in `Other/Solution.xml`:
 
     <Managed>1</Managed>
 
 That one bit is also where the `_managed` suffixes come from. Every `AppModule_managed.xml` and
-`{8448b78f-8f42-454e-8e2a-f8196b0419af}_managed.xml` in your working tree is the packer telling you which
+`{8448b78f-8f42-454e-8e2a-f8196b0419af}_managed.xml` in your working tree is the unpacker telling you which
 tree you are standing in, not something a maker typed.
 
 The practical consequence for a pipeline is that you cannot flip a solution's type as a build step, so
-the type has to be a property of the repo folder you check out. If a step reads its argument from a
+the type has to be a property of the solution folder you check out. If a step reads its argument from a
 variable, the failure you get is a message about a mismatch that names your flag - which reads as if you
 typed something wrong, when the folder is what decided.

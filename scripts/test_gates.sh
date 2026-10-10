@@ -382,6 +382,15 @@ else
 fi
 rm -f "$QUEUED"
 
+# the body scan: no published tip reads as machine-written
+if out=$(python3 "$ROOT/scripts/slop_scan.py" "$ROOT"/_tips/*.md 2>&1); then
+  echo "ok    no published tip body reads as machine-written"
+else
+  echo "FAIL  a published tip body reads as machine-written"
+  echo "$out" | sed 's/^/      /'
+  fails=$((fails + 1))
+fi
+
 cleanup
 if [ "$fails" -ne 0 ]; then
   echo

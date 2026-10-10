@@ -18,9 +18,9 @@ from pathlib import Path
 
 RULES: list[tuple[str, str]] = [
     # the body is for a maker doing the work, never about our own repository or process
-    ("forensics", r"\b(this|the) (repository|repo|checkout)\b"),
-    ("forensics", r"\bqueue template|\bvalidator\b|\bevidence block\b|\btest fixture|\bverified_on\b|\bgates?\b"),
-    ("forensics", r"\bI scanned\b|\bmy own repository\b|\bthe artifact\b|\bthis tip's own\b"),
+    ("forensics", r"\b(my|our|this) (repository|repo|checkout)\b"),
+    ("forensics", r"\bqueue template\b|\bthe validator\b|\bvalidate_tips\b|\bevidence block\b|\btest fixture\b|\bverified_on\b|\bthe gates\b"),
+    ("forensics", r"\bI scanned\b|\bmy own repository\b|\bthis tip's own\b|\bthe artifact (script|for this tip)\b|\bthis tip's artifact\b"),
     ("forensics", r"\breviewers?\b|\breview (round|pass|loop|process)\b|\bcode review\b|\bclaude\b|\bagy\b"),
     # announcing structure instead of saying something
     ("count opener", r"^\**\s*(One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|\d+)\s+"
@@ -30,7 +30,7 @@ RULES: list[tuple[str, str]] = [
     # evaluative tails and rhetorical closes
     ("evaluative tail", r"\bworth knowing\b|\b(earns?|earned) (its|their) keep\b|\bis the part\b"),
     ("evaluative tail", r"\bthe (whole )?(point|trick|tell)\b|\bharder to notice than\b"),
-    ("evaluative tail", r"\bthe kind of thing you have to\b|\bwhich is why\b$"),
+    ("evaluative tail", r"\bthe kind of thing you have to\b|\bwhich is why\b"),
     # essay frames
     ("essay frame", r"\bnot (only|just)\b[^.]{0,60}\b(but|they became|it)\b|\bmore than just\b"),
     ("essay frame", r"\b(it|that) is worth (noting|saying)\b|\blet'?s (look|start|walk)\b"),
@@ -63,11 +63,29 @@ def scan(path: Path) -> list[tuple[int, str, str]]:
     hits = []
     for i, line in enumerate(lines):
         stripped = line.strip()
-        if not stripped or stripped.startswith(("#", "|", "```")):
+        if not stripped or line.startswith("    ") or stripped.startswith(("#", "|", "```")):
             continue
+        prose = re.sub(r"`[^`]*`", " ", line)      # inline code is not prose
         for name, pattern in RULES:
-            for m in re.finditer(pattern, line, re.I):
+            for m in re.finditer(pattern, prose, re.I):
+                if " and " in m.group(0).lower():
+                    continue
                 hits.append((offset + i, name, m.group(0)[:60]))
+    # a triad that wraps across lines is still a triad, so join each paragraph and retry that rule
+    para, first = [], 0
+    for i, line in enumerate(lines + [""]):
+        if line.strip():
+            if not para:
+                first = i
+            para.append(line.strip())
+            continue
+        if len(para) > 1:
+            joined = " ".join(para)
+            for m in re.finditer(dict(RULES)["list triad"], joined, re.I):
+                if " and " in m.group(0).lower():
+                    continue
+                hits.append((offset + first, "list triad (wrapped)", m.group(0)[:60]))
+        para = []
     return hits
 
 

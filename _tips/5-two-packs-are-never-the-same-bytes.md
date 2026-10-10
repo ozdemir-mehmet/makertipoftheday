@@ -40,10 +40,10 @@ version, the same components, the same bytes inside, and a different file on dis
     same2.zip  6632 bytes  sha256 dfa77e387980a4d25ef968e3
 
 Same size, different hash. Unzip both and the contents are identical, down to the hashes of every
-member: the four parts in the container are the same four parts. The difference is the container - the
+member. The difference is the container - the
 zip's own metadata - and it moves every time you pack.
 
-This matters the moment a pipeline looks at the artifact rather than at the solution. A step that hashes
+This matters the moment a pipeline looks at the built package rather than at the solution. A step that hashes
 the zip to detect "did anything change" reports a change on every build. A PR that includes the built
 package shows a binary diff nobody can review. An artifact cache keyed on the file's hash misses every
 time. None of it is a change to your solution, and all of it looks like one.
