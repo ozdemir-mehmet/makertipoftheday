@@ -202,8 +202,10 @@ expect "a backfilled publish date is accepted" 0 "all gates pass" "$DOC"
 # Forward-dating is the failure this replaces: Jekyll drops a future-dated collection document, so the
 # tip 404s and the build says nothing. VERIFIED and EXPIRES move next to today's date so the future
 # rule is the only one that can fire here.
-reset_case; VERIFIED="$(date +%F)"; EXPIRES="$(date -d '+90 days' +%F)"; PUBLISHED="$(date -d '+1 day' +%F)"; write_doc
+SITE_TZ="$(sed -n 's/^timezone: *//p' "$ROOT/_config.yml" | head -1)"
+reset_case; VERIFIED="$(TZ="$SITE_TZ" date +%F)"; EXPIRES="$(TZ="$SITE_TZ" date -d '+90 days' +%F)"; PUBLISHED="$(TZ="$SITE_TZ" date -d '+1 day' +%F)"; write_doc
 expect "a publish date in the future is rejected" 1 "in the future" "$DOC"
+
 
 reset_case; PUBLISHED="2026-09-01"; write_doc
 expect "a publish date after the expiry is rejected" 1 "already expired" "$DOC"
@@ -392,6 +394,14 @@ else
 fi
 
 cleanup
+# the bug this fixes: a tip dated today in the site's timezone, judged by a runner a day behind in UTC
+if out=$(cd "$ROOT" && TZ=UTC python3 scripts/validate_tips.py 2>&1); then
+  echo "ok    a same-day publish passes even when the runner's clock is still yesterday"
+else
+  echo "FAIL  a same-day publish is rejected when the runner's clock is still yesterday"
+  echo "$out" | sed 's/^/      /'
+  fails=$((fails + 1))
+fi
 if [ "$fails" -ne 0 ]; then
   echo
   echo "Gate self-test failed."

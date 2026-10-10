@@ -28,6 +28,7 @@ import datetime as dt
 import os
 import re
 import sys
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -37,6 +38,21 @@ QUEUE_DIR = ROOT / "queue"
 DRAFTS_DIR = ROOT / "_drafts"
 
 SURFACES_FILE = ROOT / "_data" / "surfaces.yml"
+
+
+
+def site_timezone() -> str:
+    """The site's timezone, read from _config.yml - the same value Jekyll dates documents by.
+
+    Hardcoding it here would duplicate the source of truth: change the site's timezone and the
+    validator would silently keep judging publish dates in the old one.
+    """
+    cfg = ROOT / "_config.yml"
+    for line in cfg.read_text(encoding="utf-8").splitlines():
+        if line.startswith("timezone:"):
+            return line.split(":", 1)[1].strip().strip("'\"")
+    print(f"{cfg}: no timezone key - the validator cannot judge a publish date")
+    sys.exit(2)
 
 
 def load_surfaces() -> dict[str, str]:
@@ -72,6 +88,12 @@ def load_surfaces() -> dict[str, str]:
 
 try:
     SURFACES = load_surfaces()
+    SITE_TZ = site_timezone()
+    try:
+        SITE_ZONE = ZoneInfo(SITE_TZ)
+    except Exception as exc:
+        print(f"cannot resolve the site timezone {SITE_TZ!r} ({exc}) - install tzdata")
+        sys.exit(2)
 except RuntimeError as exc:
     print(f"error: the surface vocabulary is unusable - {exc}", file=sys.stderr)
     sys.exit(2)
@@ -423,7 +445,11 @@ def check_tip(path: Path, errors: list[str]) -> int | None:
     else:
         publish_date = as_date(published) if published else None
         expires = as_date(data.get("expires_on", ""))
-        if publish_date and publish_date > dt.date.today():
+        # Today where the site is, not where CI runs. GitHub runners are UTC, so a tip dated
+        # 2026-10-11 in Sydney still looked like tomorrow to them until 11:00 local, and a
+        # same-day publish was rejected as forward-dated.
+        site_today = dt.datetime.now(SITE_ZONE).date()
+        if publish_date and publish_date > site_today:
             errors.append(
                 f"{where}: date ({publish_date}) is in the future - Jekyll withholds a future-dated "
                 f"collection document, so the tip would be missing from the site with no error. A tip "
