@@ -3,8 +3,7 @@ title: "Fabric deletes what you leave in an item folder"
 summary: "An item folder is the one carrying .platform, or the older metadata pair. Files inside it that are not part of the item definition go at the next commit; files outside any item folder stay."
 surface: fabric
 tip_number: 13
-state: ready
-next_step: ""
+date: 2026-10-13
 wave: "n/a - Fabric Git integration; release waves were retired in September 2026"
 build: "Fabric workspace source control as documented in Git integration process (the commit rule) and Git source code format (the item folder and .platform); a tree in those documented shapes read by the artifact"
 verified_on: 2026-10-12
