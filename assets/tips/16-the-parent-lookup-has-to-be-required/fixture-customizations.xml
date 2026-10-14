@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A one-table fixture built to the shapes the docs describe, to exercise the lookup path the CoE
+     solution never reaches: new_child has quick create on, one business-required text column, and a
+     required lookup back to its parent on the quick create form. Ninety per cent of it is not modelled;
+     it exists to show what the artifact prints when the rule is satisfied and when it is not. -->
+<ImportExportXml>
+  <Entities>
+    <Entity>
+      <Name LocalizedName="Child">new_child</Name>
+      <IsQuickCreateEnabled>1</IsQuickCreateEnabled>
+      <attributes>
+        <attribute PhysicalName="new_ChildId">
+          <Type>primarykey</Type><Name>new_childid</Name><LogicalName>new_childid</LogicalName>
+          <RequiredLevel>systemrequired</RequiredLevel>
+        </attribute>
+        <attribute PhysicalName="new_Name">
+          <Type>nvarchar</Type><Name>new_name</Name><LogicalName>new_name</LogicalName>
+          <RequiredLevel>required</RequiredLevel>
+        </attribute>
+        <attribute PhysicalName="new_ParentId">
+          <Type>lookup</Type><Name>new_parentid</Name><LogicalName>new_parentid</LogicalName>
+          <RequiredLevel>required</RequiredLevel>
+          <LookupTypes><LookupType>new_parent</LookupType></LookupTypes>
+        </attribute>
+        <attribute PhysicalName="new_OptionalId">
+          <Type>lookup</Type><Name>new_optionalid</Name><LogicalName>new_optionalid</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <LookupTypes><LookupType>new_parent</LookupType></LookupTypes>
+        </attribute>
+        <attribute PhysicalName="OwnerId">
+          <Type>owner</Type><Name>ownerid</Name><LogicalName>ownerid</LogicalName>
+          <RequiredLevel>systemrequired</RequiredLevel>
+        </attribute>
+      </attributes>
+      <FormXml>
+        <forms type="main">
+          <systemform><formid>{00000000-0000-0000-0000-000000000001}</formid>
+            <form><control id="new_name" datafieldname="new_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" /><control id="new_parentid" datafieldname="new_parentid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" /></form>
+          </systemform>
+        </forms>
+        <forms type="quickCreate">
+          <systemform><formid>{00000000-0000-0000-0000-000000000002}</formid>
+            <form><control id="new_name" datafieldname="new_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" /><control id="new_parentid" datafieldname="new_parentid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" /><control id="new_optionalid" datafieldname="new_optionalid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" /></form>
+          </systemform>
+        </forms>
+      </FormXml>
+    </Entity>
+  </Entities>
+</ImportExportXml>

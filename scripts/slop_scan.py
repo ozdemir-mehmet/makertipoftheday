@@ -38,6 +38,7 @@ RULES: list[tuple[str, str]] = [
     # evaluative tails and rhetorical closes
     ("evaluative tail", r"\bworth knowing\b|\b(earns?|earned) (its|their) keep\b|\bis the part\b"),
     ("evaluative tail", r"\bthe (whole )?(point|trick|tell)\b|\bharder to notice than\b"),
+    ("evaluative tail", r"\bis the one (that|to) (bites|biting|catches|trips|hurts|matters)\b|\bworth keeping\b"),
     ("evaluative tail", r"\bthe kind of thing you have to\b|\bwhich is why\b"),
     # essay frames
     ("essay frame", r"\bnot (only|just)\b[^.]{0,60}\b(but|they became|it)\b|\bmore than just\b"),
