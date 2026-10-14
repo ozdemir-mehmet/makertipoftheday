@@ -3,8 +3,7 @@ title: "Your channel is records, not a setting"
 summary: "Bringing a channel into Customer Service is not a toggle or a plugin. It is records in msdyn_ tables, and the samples ship the schema that types every field of them."
 surface: dynamics-crm
 tip_number: 15
-state: ready
-next_step: ""
+date: 2026-10-15
 source: "https://github.com/microsoft/Dynamics365-Apps-Samples/blob/master/customer-service/omnichannel/sms-channel-sample-schema/sms-workstream-sample-schema.xml"
 artifact: "assets/tips/15-your-channel-is-records-not-a-setting/channel-schema-report.py"
 wave: "n/a - Customer Service Omnichannel; release waves were retired in September 2026"
