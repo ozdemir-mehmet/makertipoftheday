@@ -3,8 +3,7 @@ title: "Get the quick create pane to open"
 summary: "The pane opens when the table flag is on, the table and its quick create form are in the app, and the parent lookup on that form is set to business required."
 surface: power-platform
 tip_number: 16
-state: ready
-next_step: ""
+date: 2026-10-16
 source: "https://learn.microsoft.com/en-us/dynamics365/customerengagement/on-premises/customize/create-edit-quick-create-forms"
 artifact: "assets/tips/16-the-parent-lookup-has-to-be-required/quick-create-check.py"
 wave: "n/a - model-driven app quick create forms; release waves were retired in September 2026"
