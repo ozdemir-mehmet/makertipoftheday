@@ -1,36 +1,45 @@
 ---
 title: "The time zone bug in your flow is the assumption, not the conversion"
-summary: "Connectors hand a flow datetimes in whichever zone they felt like, and the documented fix is naming the direction: `convertFromUtc` and `convertToUtc`."
+summary: "Find out which zone the datetime is already in before you convert it, then name that zone as the source: connectors differ, and the platform converts whatever you give it."
 surface: power-platform
 tip_number: 28
 state: draft
 source: "https://learn.microsoft.com/en-us/power-automate/convert-time-zone"
-next_step: "In a development environment, run a flow over a connector that returns local time and one that returns UTC, log both raw values, then convert each with `convertFromUtc` and paste the before and after into the evidence block."
+next_step: "In a development environment, run a flow over a connector that returns local time and one that returns UTC, log both raw values, then convert each with the Convert time zone action and with convertFromUtc/convertToUtc, and paste the before and after into the evidence block."
 ---
 
-**Tip**
+## The zone comes from the connector, not from your flow
 
-Decide where the zone changes and do it in one place, with the function that names the direction.
-`convertFromUtc` takes a UTC timestamp to a named zone and `convertToUtc` goes the other way; both are
-documented alongside the Convert time zone action, and the reason to prefer the functions is that the
-function name states which way the value is moving while the action's name does not.
+A datetime arrives from a trigger or an action, and the zone it is in is the sending service's choice:
+connectors differ in the formats and zones they work in, and some of them work only in UTC. Before you
+convert anything, run the flow and read the datetime the action actually produced: a trailing `Z` is how a
+UTC value shows itself, the way `2020-04-10T01:28:14.0406387Z` does in the guidance.
 
-The documented warning is the part worth pasting into a code review:
+## The action asks you to name the source zone
 
-> Dates are passed through services in varying formats or time zones, so each connector might use a
-> different datetime format or time zone. Some services strictly use UTC time to avoid confusion.
+Convert time zone, the built-in operation, takes the base time, a source time zone, a destination time zone
+and an optional format string. The source time zone is the zone the datetime is currently in, and it is the
+one input the platform cannot work out for itself, so it is the one worth checking against the raw value you
+just read.
 
-Read that again as an instruction: the format and the zone are properties of the connector, not of
-the flow, so the same expression can be right in one flow and wrong in the next. A trigger that
-returns a timestamp in UTC and a SharePoint column that returns one in the site's zone will both look
-like "a date" in the run history, which is exactly why the bug survives review.
+## The functions name the direction
 
-**Where this bites**
+When one end of the conversion is UTC, the expression functions carry the direction in their names:
+`convertFromUtc` takes a UTC timestamp to a named zone, `convertToUtc` takes a timestamp in a named zone to
+UTC. When you want both ends written out in the expression, `convertTimeZone` takes the source zone and the
+destination zone:
 
-When the tenant is not in one zone. Everything looks correct to the maker who tested it until the
-first user in Perth.
+    convertTimeZone(triggerBody()?['Date'],'UTC','Eastern Standard Time','HH:mm')
 
-**Try it**
+## An ISO8601 message is about the value, not the zone
 
-Log the raw value and the converted value in the same run, side by side, before anyone downstream
-consumes it.
+An error saying the date time string must match ISO8601 format is about the shape of the value, so compare
+the raw string against what the function expects before you change the zone.
+
+## Some connectors show the zone their own way
+
+A connector can carry its own limits on how the time zone displays, and the connector reference is where
+each one's behaviour is written down.
+
+Convert once, where the value crosses into storage or out to the consumer, and the step after it reads the
+value you decided on rather than a value that moved again.
