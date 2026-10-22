@@ -35,7 +35,10 @@ generated filler tip is worse than no tip. The queue is what covers those days.
 ## Naming
 
 `<tip_number>-<slug>.md`, matching the tip number it will carry when published, so the queue and the
-published collection stay reconcilable. Publishing is a move and three edits:
+published collection stay reconcilable. A published tip's number is its position in the collection - the
+twenty-second tip to publish is tip 22 - so a queued number is provisional until promotion, and the
+validator fails any published tip whose number does not match its place in the date order. Publishing is a
+move and three edits:
 `queue/<n>-<slug>.md` to `_tips/<n>-<slug>.md`, **drop the `state:` key** (it is queue-only, and the
 validator rejects unknown keys in a tip), add `date:` - the date the tip carries, backfillable to
 2026-10-01 and never forward - and re-run the artifact.

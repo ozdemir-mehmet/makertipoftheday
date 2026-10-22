@@ -2,7 +2,7 @@
 title: "Unpack a second solution into the same folder and pac will not pack it"
 summary: "pac solution unpack prints 'Not deleting files' and leaves the earlier solution's components behind, so the next pack fails RootComponent validation."
 surface: solution-packaging
-tip_number: 18
+tip_number: 21
 wave: "n/a - pac CLI behaviour, not a release wave"
 build: "pac CLI 2.13.1+g251dee1 on .NET 10.0.11; MetadataBrowser_4_0_0_0_managed.zip sha256 adeb61f9fcb4966d50405d299d8ae4534071550f0b146156b0eedfc969419cc1 and JavaScriptWebResourceExampleSolution_1_0_managed.zip sha256 3d94d4dc7e63d336d2bf12721df9af470fa7c4f0a60f1ed8c88784c309831570, both from microsoft/PowerApps-Samples releases"
 date: 2026-10-21

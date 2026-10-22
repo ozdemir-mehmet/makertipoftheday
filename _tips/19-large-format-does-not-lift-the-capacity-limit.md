@@ -2,7 +2,7 @@
 title: "Your model still fails to load after you enable the large storage format"
 summary: "Large storage format lifts the SKU ceiling on a model's compressed size, but the capacity's Max Offline Semantic model Size still caps it in either format."
 surface: power-bi
-tip_number: 20
+tip_number: 19
 wave: "n/a - a capacity setting and a storage format, not a release wave"
 build: "none - no CLI build involved; two Learn pages fetched and the SKU ceiling table parsed from one of them"
 date: 2026-10-19

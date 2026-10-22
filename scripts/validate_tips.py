@@ -619,6 +619,27 @@ def main(argv: list[str] | None = None) -> int:
     if not arguments:
         check_drafts(DRAFTS_DIR, errors)
 
+    # A published tip's number IS its position in the collection: the Nth tip to publish is tip N.
+    # Without this, a tip renamed at promotion (which the queue's naming rule allows) or a backfill
+    # leaves the URL and the "Tip #n" strip disagreeing with the order readers see on /all/.
+    if not arguments:
+        dated: list[tuple[str, int, str]] = []
+        for path in tips:
+            try:
+                data, _body, _raw = parse_front_matter(path)
+            except SystemExit:
+                continue
+            published = data.get("date")
+            number = check_tip_number(data, "", [])
+            if published and number is not None:
+                dated.append((str(published), number, path.relative_to(ROOT).as_posix()))
+        for expected, (published, number, where) in enumerate(sorted(dated), start=1):
+            if number != expected:
+                errors.append(
+                    f"{where}: tip_number is {number} but its publish date {published} makes it tip "
+                    f"{expected} - a published tip's number is its position in the collection"
+                )
+
     for message in errors:
         print(f"FAIL {message}", file=sys.stderr)
 

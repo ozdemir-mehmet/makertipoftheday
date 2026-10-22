@@ -2,7 +2,7 @@
 title: "The heat map on a choice column has one colour for every option"
 summary: "A heat map reads the number stored behind each choice against a 0-100 range, and option values start in the hundreds of millions, so every option lands at the same end."
 surface: dataverse
-tip_number: 21
+tip_number: 20
 wave: "n/a - a preview display option, not a release wave"
 build: "none - no CLI build involved; one Learn page fetched and fifteen option-set files parsed from a public sample at a pinned commit"
 date: 2026-10-20

@@ -2,7 +2,7 @@
 title: "Your status filter on a plug-in step does not mean the status changed"
 summary: "A filtering attribute fires when the column is in the update request, not when its value changes, so an update that carries the same status still runs the step."
 surface: extensibility
-tip_number: 19
+tip_number: 18
 wave: "n/a - documented behaviour, not a release wave"
 build: "none - no CLI build involved; two sample solutions read at pinned commits and four Learn pages checked"
 date: 2026-10-18
