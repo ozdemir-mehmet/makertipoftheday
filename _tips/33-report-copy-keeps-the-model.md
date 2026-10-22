@@ -3,9 +3,9 @@ title: "Your copy of the report opens the shared model for editing"
 summary: "A copy of a report folder keeps the relative model reference in definition.pbir, and byPath opens that model in full edit mode - so the model behind a copy is one folder other reports read too."
 surface: power-bi
 tip_number: 33
-state: ready
 wave: "n/a - Power BI Desktop project file behaviour, not a release wave"
 build: "none - no CLI build involved; 12 report folders read from microsoft/finops-toolkit at commit 1da3fcbe, and one Learn page fetched at its canonical URL"
+date: 2026-10-22
 verified_on: 2026-10-22
 verified_env: "Linux (CachyOS), no Power BI Desktop and no tenant: 12 definition.pbir files and the repo tree read over the GitHub API at a pinned commit, one Learn page fetched; nothing opened in Desktop and nothing published"
 expires_on: 2027-04-15
