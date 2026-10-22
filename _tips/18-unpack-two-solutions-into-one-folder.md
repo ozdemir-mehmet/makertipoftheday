@@ -15,7 +15,9 @@ artifact: "assets/tips/18-unpack-two-solutions-into-one-folder/check-unpack-fold
 evidence: |
   run 2026-10-17, pac CLI 2.13.1+g251dee1 (.NET 10.0.11), Linux, no tenant.
   re-run 2026-10-22 at promotion, same two zips re-downloaded from the microsoft/PowerApps-Samples
-  releases and both sha256 hashes matched the ones recorded above: five checks ok, exit 0.
+  releases and both sha256 hashes matched the ones recorded above: exit 0.
+  re-run 2026-10-22 after review: the artifact gained a check for the closing claim in the body - a fresh
+  folder holding only the second solution packs - which the earlier run did not measure. Six checks ok.
 
   re-runnable: python3 assets/tips/18-unpack-two-solutions-into-one-folder/check-unpack-folder.py
                --zip-a MetadataBrowser_4_0_0_0_managed.zip
@@ -26,6 +28,7 @@ evidence: |
     ok    solution A's files are still present: 6 files -> 13
     ok    packing the mixed folder fails RootComponent validation: Error: RootComponent validation failed.
     ok    packing a clean folder of the same solution succeeds: 4 file(s) packed
+    ok    packing a fresh folder of the second solution alone succeeds: 4 file(s) packed
     exit 0
 
   raw transcript behind those checks:

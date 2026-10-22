@@ -99,6 +99,19 @@ def main() -> int:
                    code2 == 0 and "Packed Solution" in out2 and bool(contents),
                    f"{len(contents)} file(s) packed"))
 
+    # The tip's closing claim is about the second solution specifically: a fresh folder that holds only
+    # solution B - no trace of A - packs. Measure that, not only the solution-A control above.
+    clean_b = work / "clean-b"
+    if clean_b.exists():
+        shutil.rmtree(clean_b)
+    unpack(zip_b, clean_b)
+    code3, out3 = pack(clean_b, work / "clean-b.zip")
+    packed_b = work / "clean-b.zip"
+    contents_b = zipfile.ZipFile(packed_b).namelist() if packed_b.exists() else []
+    checks.append(("packing a fresh folder of the second solution alone succeeds",
+                   code3 == 0 and "Packed Solution" in out3 and bool(contents_b),
+                   f"{len(contents_b)} file(s) packed"))
+
     failed = 0
     for label, ok, detail in checks:
         print(f"{'ok  ' if ok else 'FAIL'}  {label}: {detail}")
