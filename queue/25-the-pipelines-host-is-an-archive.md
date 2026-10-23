@@ -2,7 +2,7 @@
 title: "The pipelines host is also a solution archive, and nobody asked for that"
 summary: "Every deployment through pipelines exports both the managed and the unmanaged solution and stores both in the pipelines host, so the host accumulates a copy of every version you have ever promoted."
 surface: alm-governance
-tip_number: 24
+tip_number: 25
 state: draft
 source: "https://learn.microsoft.com/en-us/power-platform/alm/pipelines"
 next_step: "In a development environment with pipelines configured, deploy the same solution twice and list what lands in the pipelines host's solution history."
