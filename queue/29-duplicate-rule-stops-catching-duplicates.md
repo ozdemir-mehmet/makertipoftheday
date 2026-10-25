@@ -2,7 +2,7 @@
 title: "Your duplicate detection rule stopped catching duplicates the day someone lengthened a field"
 summary: "A rule's matchcode is built when the rule is published; widen a criteria field later and that field can outrun the matchcode limit and go unverified, with no error and no duplicates found."
 surface: dynamics-crm
-tip_number: 27
+tip_number: 29
 state: draft
 next_step: "In a development environment: publish a duplicate detection rule over a short text field, lengthen that field, create the near-duplicate that should match, and record whether detection fires; then unpublish and republish the rule and retest. That run is the only thing that can establish a fix - neither page states what restores verification after the field outruns the matchcode limit, and the criteria form's Current matchcode length value is documented only as an editing prompt."
 source: "https://learn.microsoft.com/en-us/power-platform/admin/detect-duplicate-data"
